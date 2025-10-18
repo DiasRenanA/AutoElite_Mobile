@@ -1,10 +1,11 @@
 import { ButtonConfirmar } from "@/src/components/buttonsComponent/buttons";
+import { router } from "expo-router";
 import { Image, ScrollView, Text, View } from "react-native";
 import { Styles } from "./style";
 
 export const HomeScreen = () => {
-    const defaut = () => {
-        alert("Botão clicado");
+    const irParaLogin = () => {
+        router.push('/login');
     };
 
     return(
@@ -28,11 +29,11 @@ export const HomeScreen = () => {
                 <View style={Styles.containerButton}>
                     <ButtonConfirmar
                         titulo="SEJA ELITE"
-                        onPress={defaut}
+                        onPress={irParaLogin}
                     />
                     <ButtonConfirmar
                         titulo="JA SOU ELITE"
-                        onPress={defaut}
+                        onPress={irParaLogin}
                     />
                 </View>
 

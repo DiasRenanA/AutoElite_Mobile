@@ -14,4 +14,12 @@ export function ButtonConfirmar({ titulo, onPress }: typeButton) {
     )
 }
 
+export function ButtonEnviar({ titulo, onPress }: typeButton) {
+    return(
+        <TouchableOpacity style={Styles.buttonEnviar} onPress={onPress} activeOpacity={0.7}>
+            <Text style={Styles.textButtonEnviar}>{titulo}</Text>
+        </TouchableOpacity>
+    )
+}
+
 
