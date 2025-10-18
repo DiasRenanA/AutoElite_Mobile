@@ -8,6 +8,10 @@ export const HomeScreen = () => {
         router.push('/login');
     };
 
+    const irParaCadastro = () => {
+        router.push('/cadastro');
+    };
+
     return(
         <ScrollView >
             <View style={Styles.container}>
@@ -29,7 +33,7 @@ export const HomeScreen = () => {
                 <View style={Styles.containerButton}>
                     <ButtonConfirmar
                         titulo="SEJA ELITE"
-                        onPress={irParaLogin}
+                        onPress={irParaCadastro}
                     />
                     <ButtonConfirmar
                         titulo="JA SOU ELITE"
