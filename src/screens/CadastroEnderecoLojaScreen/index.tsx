@@ -5,7 +5,7 @@ import { Styles } from "./style"
 
 export const CadastroEnderecoLojaScreen = () => {
     const proximo = () => {
-        router.push('/cadastroEnderecoLoja')
+        router.push('/inicio')
     };
 
     return(

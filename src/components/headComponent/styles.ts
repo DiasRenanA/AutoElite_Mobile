@@ -2,20 +2,32 @@ import { StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
     container:{
-        paddingTop: 10,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 20
+        justifyContent: 'center',
+        width: '100%',
     },
-    texto: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#fff'
+    containerButtons: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '50%',
+        gap: 2,
     },
-    logo: {
-        width: 80,
-        height: 80,
-        resizeMode: 'contain'
-  }
+    button:{
+        borderWidth: 5, 
+        borderColor: '#C4151C',
+        borderStyle: 'solid', 
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+    textButton: {
+        color: '#C4151C',
+        fontSize: 10,
+        fontWeight: 'bold'
+    }
 })

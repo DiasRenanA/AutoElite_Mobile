@@ -1,6 +1,6 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
 import { router } from "expo-router";
-import { Image, Text, TextInput, View } from "react-native";
+import { Image, ScrollView, Text, TextInput, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroScreen = () => {
@@ -8,7 +8,8 @@ export const CadastroScreen = () => {
         router.push('/cadastroTipo');
     };
     return(
-        <View style={Styles.container}>
+        <ScrollView>
+            <View style={Styles.container}>
             <Image
                 source={require('@/src/assets/images/LogoAutoElite.svg')}
                 resizeMode="contain"
@@ -42,7 +43,7 @@ export const CadastroScreen = () => {
                 </View>
 
             </View>
-
         </View>
+        </ScrollView>
     )
 }

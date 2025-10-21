@@ -7,7 +7,7 @@ export const CadastroEnderecoClienteScreen = () => {
 
 
     const proximo = () => {
-        router.push('/cadastroEnderecoCliente')
+        router.push('/inicio')
     };
 
     return(
