@@ -5,7 +5,7 @@ import { Styles } from "./style";
 
 export const CadastroScreen = () => {
     const proximo = () => {
-        router.push('/login');
+        router.push('/cadastroTipo');
     };
     return(
         <View style={Styles.container}>
