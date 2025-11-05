@@ -16,6 +16,6 @@ export const Styles = StyleSheet.create({
         color: '#fff',
         padding: 5,
         flex: 1,
-        borderWidth: 0
+        borderWidth: 0,
     }
 })
