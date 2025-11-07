@@ -31,30 +31,43 @@ export const Styles = StyleSheet.create({
         paddingVertical: 5
     },
 
-    textButtonConfirmar: {
-        color: '#fff',    
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-
-    buttonEnviar:{
-        backgroundColor: '#fff',
-        paddingVertical: 3,      
-        borderRadius: 5,
+    containerCardGrande: {
+        paddingVertical: 10,      
+        paddingHorizontal: 40,
+        borderRadius: 30,
+        borderWidth: 8, 
+        borderColor: '#C4151C',
+        borderStyle: 'solid', 
         elevation: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        width: '100%',
-        marginTop: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        maxWidth: 450 
     },
 
-    textButtonEnviar:{
-        color: '#000',    
-        fontSize: 15,
+    h2:{
+        textAlign:'center',
         fontWeight: 'bold',
-        textAlign: 'center'
+        fontSize: 15,
+        width: '70%'
+    },
+
+    boxTextCardGrandeContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: 'left',
+        gap: 5,
+        width: '100%'
+    },
+
+    boxTextCardGrande:{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 5,
     }
+
 })

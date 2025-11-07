@@ -7,6 +7,9 @@ export const CadastroEnderecoLojaScreen = () => {
     const proximo = () => {
         router.push('/inicio')
     };
+    const irParaAdminPanelLoja = () => {
+        router.push('/adminPanelLoja')
+    };
 
     return(
         <ScrollView>
@@ -65,7 +68,7 @@ export const CadastroEnderecoLojaScreen = () => {
 
                     <ButtonEnviar 
                         titulo="Enviar"
-                        onPress={proximo}
+                        onPress={irParaAdminPanelLoja}
                     />
 
                 </View>

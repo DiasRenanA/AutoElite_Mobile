@@ -7,6 +7,10 @@ export const Head = () => {
          router.push('/inicio')
     } 
 
+    const irParaPerfil = () => {
+         router.push('/perfil')
+    } 
+
     return(
        <View style={Styles.container}>
             <Image
@@ -33,10 +37,13 @@ export const Head = () => {
                 </TouchableOpacity> 
             </View>
 
-            <Image
-                source={require('@/src/assets/images/user_icon.svg')}
-                resizeMode="contain"
-            />
+            <TouchableOpacity style={Styles.button} onPress={irParaPerfil} activeOpacity={0.7}>
+                <Image
+                    source={require('@/src/assets/images/user_icon.svg')}
+                    resizeMode="contain"
+                />
+            </TouchableOpacity>
+            
         </View>
     )
 }

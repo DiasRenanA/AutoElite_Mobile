@@ -1,11 +1,14 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
 import { router } from "expo-router";
-import { Image, Text, TextInput, View } from "react-native";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
 export const LoginScreens = () => {
     const proximo = () => {
         router.push('/login');
+    };
+    const irParaAdm = () => {
+        router.push('/adminPanel');
     };
     return(
         <View style={Styles.container}>
@@ -35,6 +38,9 @@ export const LoginScreens = () => {
                     <Text style={Styles.boxText}>Esqueceu a senha?</Text>
                     <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
                 </View>
+                <TouchableOpacity style={{}} onPress={irParaAdm} activeOpacity={0.7}>
+                    <Text>Admin</Text>
+                </TouchableOpacity>
 
             </View>
 
