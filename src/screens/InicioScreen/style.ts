@@ -6,7 +6,8 @@ export const Styles = StyleSheet.create({
         flexWrap: 'wrap',
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        gap: 20
     },
     containerBeneficios:{
         display:'flex',

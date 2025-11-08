@@ -7,6 +7,7 @@ export const Styles = StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
         fontFamily: 'Racing Sans One',
-        marginVertical: 15,
+        marginTop: 20,
+        marginBlock: 10
     }
 })

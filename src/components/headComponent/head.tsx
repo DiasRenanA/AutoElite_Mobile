@@ -47,3 +47,35 @@ export const Head = () => {
         </View>
     )
 }
+
+export const HeadAdmLoja = () => {
+    
+    // Ajustei os nomes das funções para clareza
+    const irParaMenu = () => {
+        // router.push('/inicio') // ou '/menu'
+    } 
+
+    const irParaProdutos = () => {
+        // router.push('/produtos') 
+    } 
+
+    return(
+        <View style={Styles.containerAdmLoja}>
+            {/* Logo na Esquerda */}
+            <Image
+                style={Styles.logo} // Aplicando estilo do StyleSheet
+                source={require('@/src/assets/images/LogoAutoElite.svg')}
+                resizeMode="contain"
+            />
+
+            <TouchableOpacity onPress={irParaMenu} activeOpacity={0.7}>
+                {/* Texto alterado para "Menu" */}
+                <Text style={Styles.containerAdmLojaText}>Menu</Text> 
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={irParaProdutos} activeOpacity={0.7}>
+                <Text style={Styles.containerAdmLojaText}>Produtos</Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
