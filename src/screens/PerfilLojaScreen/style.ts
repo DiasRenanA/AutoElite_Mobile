@@ -7,7 +7,7 @@ export const Styles = StyleSheet.create({
         gap: 30,
         paddingVertical: 20,
         paddingHorizontal: 30,
-        backgroundColor: '#FAFAFA' 
+        backgroundColor: '#FAFAFA' ,
     },
 
     h1:{

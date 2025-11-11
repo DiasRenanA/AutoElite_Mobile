@@ -31,7 +31,7 @@ export const Styles = StyleSheet.create({
         fontWeight: 'bold'
     },
 
-containerAdmLoja: {
+    containerAdmLoja: {
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: '#000',

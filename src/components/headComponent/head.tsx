@@ -3,7 +3,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native"
 import { Styles } from "./styles"
 
 export const Head = () => {
-    const irPara = () => {
+    const irParaInicio = () => {
          router.push('/inicio')
     } 
 
@@ -13,31 +13,33 @@ export const Head = () => {
 
     return(
        <View style={Styles.container}>
-            <Image
-                style={{width: 100}}
-                source={require('@/src/assets/images/LogoAutoElite.svg')}
-                resizeMode="contain"
-            />
+            <TouchableOpacity style={{}} onPress={irParaInicio} activeOpacity={0.7}>
+                <Image
+                    style={{width: 100}}
+                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    resizeMode="contain"
+                />
+            </TouchableOpacity>
 
             <View style={Styles.containerButtons}>
-                <TouchableOpacity style={Styles.button} onPress={irPara} activeOpacity={0.7}>
+                <TouchableOpacity style={Styles.button} activeOpacity={0.7}>
                     <Text style={Styles.textButton}>Sobre nós</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={Styles.button} onPress={irPara} activeOpacity={0.7}>
+                <TouchableOpacity style={Styles.button} activeOpacity={0.7}>
                     <Text style={Styles.textButton}>Como funcionamos</Text>
                 </TouchableOpacity> 
 
-                <TouchableOpacity style={Styles.button} onPress={irPara} activeOpacity={0.7}>
+                <TouchableOpacity style={Styles.button} activeOpacity={0.7}>
                     <Text style={Styles.textButton}>Nosso Objetivo</Text>
                 </TouchableOpacity> 
 
-                <TouchableOpacity style={Styles.button} onPress={irPara} activeOpacity={0.7}>
+                <TouchableOpacity style={Styles.button} activeOpacity={0.7}>
                     <Text style={Styles.textButton}>Contatos</Text>
                 </TouchableOpacity> 
             </View>
 
-            <TouchableOpacity style={Styles.button} onPress={irParaPerfil} activeOpacity={0.7}>
+            <TouchableOpacity style={{}} onPress={irParaPerfil} activeOpacity={0.7}>
                 <Image
                     source={require('@/src/assets/images/user_icon.svg')}
                     resizeMode="contain"
@@ -50,32 +52,42 @@ export const Head = () => {
 
 export const HeadAdmLoja = () => {
     
-    // Ajustei os nomes das funções para clareza
-    const irParaMenu = () => {
-        // router.push('/inicio') // ou '/menu'
+    const irParaPerfil = () => {
+        router.push('/perfilLoja') 
     } 
 
-    const irParaProdutos = () => {
-        // router.push('/produtos') 
+    const irParaAdminPanelLoja = () => {
+        router.push('/adminPanelLoja') 
     } 
 
     return(
         <View style={Styles.containerAdmLoja}>
-            {/* Logo na Esquerda */}
             <Image
-                style={Styles.logo} // Aplicando estilo do StyleSheet
+                style={Styles.logo} 
                 source={require('@/src/assets/images/LogoAutoElite.svg')}
                 resizeMode="contain"
             />
 
-            <TouchableOpacity onPress={irParaMenu} activeOpacity={0.7}>
-                {/* Texto alterado para "Menu" */}
-                <Text style={Styles.containerAdmLojaText}>Menu</Text> 
+            <TouchableOpacity onPress={irParaAdminPanelLoja} activeOpacity={0.7}>
+                <Text style={Styles.containerAdmLojaText}>Produtos</Text> 
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={irParaProdutos} activeOpacity={0.7}>
-                <Text style={Styles.containerAdmLojaText}>Produtos</Text>
+            <TouchableOpacity onPress={irParaPerfil} activeOpacity={0.7}>
+                <Text style={Styles.containerAdmLojaText}>Perfil</Text>
             </TouchableOpacity>
+        </View>
+    )
+}
+
+export const HeadAdm = () => {
+
+    return(
+        <View style={Styles.containerAdmLoja}>
+            <Image
+                style={Styles.logo} 
+                source={require('@/src/assets/images/LogoAutoElite.svg')}
+                resizeMode="contain"
+            />
         </View>
     )
 }
