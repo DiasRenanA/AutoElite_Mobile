@@ -15,7 +15,7 @@ export const AdminPanelLojaScreen = () => {
             <View style={Styles.container}>
                 <HeadAdmLoja />
                 <Input />
-                <TouchableOpacity style={Styles.buttonCadastrar} onPress={proximo} activeOpacity={0.7}>
+                <TouchableOpacity style={Styles.buttonCadastrar} onPress={irParaCadastrarProduto} activeOpacity={0.7}>
                     <Text style={{color: '#fff'}}>Cadastrar Produto</Text>
                 </TouchableOpacity>
                 <CardCadastroLoja

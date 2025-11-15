@@ -18,8 +18,8 @@ export const CadastroTipoScreen = () => {
                     source={require('@/src/assets/images/LogoAutoElite.svg')}
                     resizeMode="contain"
                 />
-                <Text style={Styles.textNegrito}>Antes de começarmos, <br/> precisamos te conhecer!</Text>
-                <Text style={Styles.textNegrito}>Você quer ser uma LOJA ou um <br/> CLIENTE Elite?</Text>
+                <Text style={Styles.textNegrito}>Antes de começarmos, {`\n`} precisamos te conhecer!</Text>
+                <Text style={Styles.textNegrito}>Você quer ser uma LOJA ou um {`\n`} CLIENTE Elite?</Text>
 
                 <TouchableOpacity style={Styles.buttonCardRed} onPress={irParaCadastroCliente} activeOpacity={0.7}>
                     <Text style={Styles.textCardH1}>Um Cliente Elite</Text>

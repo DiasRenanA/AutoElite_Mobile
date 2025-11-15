@@ -31,8 +31,8 @@ export const InicioScreen = () => {
                         <Text style={Styles.text_H1}>Serviços automotivos na sua mão!</Text>
                         <Text style={Styles.text_padrao}>Conectamos você à loja ideal sem complicação. Com poucos toques no celular, encontre os melhores serviços e produtos automotivos perto de você. E para as lojas, essa é a chance de se destacar e alcançar mais clientes.</Text>
                         <Text style={Styles.text_padrao}>
-                            • Tudo rápido, fácil e direto pelo seu celular. <br/>
-                            • Encontre, compare e escolha o melhor serviço para você. <br/>
+                            • Tudo rápido, fácil e direto pelo seu celular. {`\n`}
+                            • Encontre, compare e escolha o melhor serviço para você. {`\n`}
                             •<Text style={Styles.textDestacadosYellow}> Lojas premium</Text> sempre em destaque para mais visibilidade.
                         </Text>
                         <Text style={Styles.text_padrao}>Seu carro precisa, você encontra. Sua loja oferece, seu cliente acha. Simples assim!</Text>
