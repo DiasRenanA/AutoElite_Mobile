@@ -1,5 +1,5 @@
 import { CardCadastro } from "@/src/components/cardComponent/card";
-import { HeadAdmLoja } from "@/src/components/headComponent/head";
+import { HeadAdm } from "@/src/components/headComponent/head";
 import { Input } from "@/src/components/inputComponent";
 import { router } from "expo-router";
 import { FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -21,29 +21,24 @@ export const AdminPanelScreens = () => {
 ];
 const handleEditarProduto = () => {
         console.log("EDITAR:");
-        // Aqui você chamaria a navegação para a tela de edição
-        // Ex: navigation.navigate('EditarProduto', { id: produto.id });
-        // O seu 'proximo' provavelmente faria algo assim.
     };
 
     const handleDeletarProduto = () => {
         console.log("DELETAR:");
-        // Aqui você implementaria a lógica para deletar o item
     };
 
     return(
         <ScrollView>
             <View style={Styles.container}>
-                <HeadAdmLoja />
+                <HeadAdm />
                 <Input />
                 <TouchableOpacity style={Styles.buttonCadastrar} onPress={irParaCadastrarProduto} activeOpacity={0.7}>
                     <Text style={{color: '#fff'}}>Cadastrar Produto</Text>
                 </TouchableOpacity>
-<FlatList
-            data={mockProdutos} // 1. Passa os dados mocados
-            keyExtractor={(item) => item.id} // 2. Define uma chave única
+            <FlatList
+            data={mockProdutos} 
+            keyExtractor={(item) => item.id} 
             
-            // 3. Renderiza cada item da lista usando seu CardCadastro
             renderItem={({ item }) => (
                 <CardCadastro
                     title={item.title}
