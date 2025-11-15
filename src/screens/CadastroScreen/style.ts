@@ -25,7 +25,7 @@ export const Styles = StyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: 30,
         paddingVertical: 30,
-        width: '70%',
+        width: '80%',
     },
 
     textH1:{
@@ -39,7 +39,7 @@ export const Styles = StyleSheet.create({
     textInput:{
         backgroundColor: '#fff',
         borderRadius: 5,
-        paddingVertical: 3,
+        paddingVertical: 10,
         paddingHorizontal: 8,
         marginBottom: 15,
         

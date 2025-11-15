@@ -7,7 +7,8 @@ export const Styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'center',
-        gap: 20
+        gap: 30,
+        paddingBottom: 50,
     },
     containerBeneficios:{
         display:'flex',
@@ -27,7 +28,7 @@ export const Styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     text_padrao:{
-        fontSize: 12,
+        fontSize: 9,
     },
     textDestacadosYellow: {
         color: '#EECE5A',

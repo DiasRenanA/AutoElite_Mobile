@@ -7,7 +7,7 @@ export const Styles = StyleSheet.create({
         justifyContent:'center',
         alignItems: 'center',
         width: '100%',
-        gap: 30,
+        gap: 50,
     },
 
     box_init:{
@@ -23,16 +23,15 @@ export const Styles = StyleSheet.create({
         flexDirection:'column',
         width: '40%',
         gap: 10,
-        fontSize: 20,
     },
 
     text_negrito:{
         fontWeight: 'bold',
-        fontSize: 13,
+        fontSize: 12,
     },
 
     text_padrao:{
-        fontSize: 12,
+        fontSize: 10,
     },
 
     containerButton: {
@@ -58,7 +57,7 @@ export const Styles = StyleSheet.create({
     },
 
     text_H1:{
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: 'bold'
     },
 

@@ -9,6 +9,7 @@ export const Styles = StyleSheet.create({
         width: '100%',
         gap: 20,
         paddingBottom: 20,
+        marginBottom: 50,
     },
 
     textNegrito: {

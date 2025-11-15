@@ -22,7 +22,7 @@ export const Styles = StyleSheet.create({
 
     buttonEnviar:{
         backgroundColor: '#fff',
-        paddingVertical: 3,      
+        paddingVertical: 10,      
         borderRadius: 5,
         elevation: 5,
         shadowColor: '#000',

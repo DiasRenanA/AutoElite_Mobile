@@ -17,9 +17,9 @@ CardPequeno_container: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        marginRight: 15,
     },
 
-    // Renomeado de 'titleText' para 'CardPequeno_titleText'
     CardPequeno_titleText: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -27,13 +27,11 @@ CardPequeno_container: {
         marginBottom: 5,
     },
 
-    // Renomeado de 'cardImage' para 'CardPequeno_cardImage'
     CardPequeno_cardImage: {
         width: 120,
         height: 120,
     },
 
-    // Renomeado de 'distanceBox' para 'CardPequeno_distanceBox'
     CardPequeno_distanceBox: {
         display: 'flex',
         flexDirection: 'row',
@@ -46,7 +44,6 @@ CardPequeno_container: {
         paddingVertical: 8,
     },
 
-    // Renomeado de 'distanceText' para 'CardPequeno_distanceText'
     CardPequeno_distanceText: {
         color: '#fff',
         fontSize: 15,
@@ -67,11 +64,11 @@ CardPequeno_container: {
     },
 
     CardGrande_container: {
-        backgroundColor: '#fff', // Faltava o fundo branco
-        paddingVertical: 20,   // Padding ajustado
-        paddingHorizontal: 20, // Padding ajustado
+        backgroundColor: '#fff',
+        paddingVertical: 20,   
+        paddingHorizontal: 20, 
         borderRadius: 30,
-        borderWidth: 6,        // Borda um pouco mais fina
+        borderWidth: 6,        
         borderColor: '#C4151C',
         borderStyle: 'solid',
         elevation: 5,
@@ -82,40 +79,38 @@ CardPequeno_container: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        maxWidth: 450,
-        gap: 15, // Adiciona espaço uniforme entre os elementos
+        maxWidth: 350,
+        gap: 15, 
     },
 
-    // Renomeado e corrigido
     CardGrande_h2: {
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: 18, // Fonte um pouco maior
-        width: '90%', // Um pouco mais de largura
+        fontSize: 18, 
+        width: '90%', 
     },
 
-    // --- Novos Estilos ---
     CardGrande_productImagesContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around', // Espaça as imagens
+        justifyContent: 'space-around', 
         width: '100%',
     },
     CardGrande_productImage: {
-        width: 120, // Ajuste o tamanho conforme necessário
+        width: 120, 
         height: 120,
     },
     CardGrande_ratingContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        flexWrap: 'wrap', // Permite quebrar a linha se for muito longo
+        flexWrap: 'wrap',
     },
     CardGrande_ratingText: {
         fontSize: 15,
     },
     CardGrande_ratingStars: {
         fontSize: 20,
-        color: '#f1c40f', // Cor amarela para estrelas
+        color: '#f1c40f', 
         marginHorizontal: 5,
     },
     CardGrande_ratingCount: {
@@ -131,23 +126,21 @@ CardPequeno_container: {
     },
     CardGrande_distanceBannerText: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: 'bold',
     },
     CardGrande_mapImage: {
         width: '100%',
-        height: 150, // Defina uma altura para o mapa
+        height: 150, 
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#ddd',
     },
-    // --- Fim dos Novos Estilos ---
 
-    // Renomeado e corrigido
     CardGrande_infoContainer: {
         display: 'flex',
         flexDirection: 'column',
-        gap: 8, // Espaço entre as linhas de informação
+        gap: 8,
         width: '100%',
     },
     CardGrande_sectionTitle: {
@@ -155,7 +148,7 @@ CardPequeno_container: {
         fontWeight: 'bold',
         color: '#333',
         marginBottom: 5,
-        borderBottomWidth: 1, // Adiciona uma linha sutil abaixo do título
+        borderBottomWidth: 1, 
         borderBottomColor: '#eee',
         paddingBottom: 5,
     },
@@ -164,7 +157,7 @@ CardPequeno_container: {
         display: 'flex',
         flexDirection: 'row',
         gap: 5,
-        flexWrap: 'wrap', // Permite que o valor quebre a linha
+        flexWrap: 'wrap', 
     },
     CardGrande_infoLabel: {
         fontWeight: 'bold',
@@ -172,14 +165,14 @@ CardPequeno_container: {
     },
     CardGrande_infoValue: {
         fontSize: 15,
-        flex: 1, // Permite que o texto ocupe o espaço e quebre a linha
+        flex: 1, 
     },
 
     containerCardCadastroLoja: {
-        backgroundColor: '#fff', // Fundo branco
+        backgroundColor: '#fff',
         borderRadius: 30,
         borderWidth: 8, 
-        borderColor: '#C4151C', // Borda vermelha
+        borderColor: '#C4151C', 
         borderStyle: 'solid', 
         elevation: 5,
         shadowColor: '#000',
@@ -188,36 +181,32 @@ CardPequeno_container: {
         shadowRadius: 3.84,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',    // Centraliza tudo
-        padding: 20,            // Espaçamento interno
-        width: 300,             // Largura do card
-        gap: 15,                // Espaço entre os itens (título, imagem, botão)
+        alignItems: 'center',  
+        padding: 20,         
+        width: 300,        
+        gap: 15,            
     },
 
-    // 2. Estilo para o título "Volante"
     cardCadastroLojaTitle: {
         fontSize: 22,
         fontWeight: 'bold',
         color: '#000',
     },
 
-    // 3. Estilo para a imagem
     cardCadastroLojaImage: {
-        width: 180, // Ajuste o tamanho conforme necessário
+        width: 180, 
         height: 180,
     },
 
-    // 4. Estilo para o botão VERDE "Vincular"
     cardCadastroLojaVincularButton: {
-        backgroundColor: '#39C80B', // Cor verde da imagem
+        backgroundColor: '#39C80B', 
         paddingVertical: 12,      
-        paddingHorizontal: 60, // Largura do botão
-        borderRadius: 30,           // Bordas arredondadas
-        alignSelf: 'stretch',     // Faz o botão esticar (ou use padding)
-        alignItems: 'center',       // Centraliza o texto
+        paddingHorizontal: 60, 
+        borderRadius: 30,          
+        alignSelf: 'stretch',    
+        alignItems: 'center',      
     },
 
-    // 5. Estilo para o texto "Vincular"
     cardCadastroLojaVincularButtonText: {
         color: '#fff',
         fontWeight: 'bold',
@@ -238,19 +227,19 @@ CardPequeno_container: {
     },
 
     CardCadastro_container: {
-        backgroundColor: '#F0EFEA', // Um cinza/bege bem claro
+        backgroundColor: '#F0EFEA',
         borderRadius: 20,
         borderWidth: 4,
-        borderColor: '#E0CA3C', // Um tom de amarelo/dourado
+        borderColor: '#E0CA3C',
         padding: 20,
         alignItems: 'center',
-        gap: 20, // Espaço entre o título, a imagem e os botões
+        gap: 20, 
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 5,
         elevation: 8,
-        width: 280, // Uma largura fixa para o card
+        width: 280, 
     },
 
     CardCadastro_title: {
@@ -262,18 +251,16 @@ CardPequeno_container: {
     CardCadastro_image: {
         width: 180,
         height: 180,
-        // A imagem no design tem um fundo branco próprio
         backgroundColor: '#fff', 
         borderRadius: 10,
     },
 
     CardCadastro_buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around', // Espaça os botões
+        justifyContent: 'space-around',
         width: '100%',
     },
 
-    // Um estilo base para os botões (tamanho, borda)
     CardCadastro_buttonBase: {
         padding: 15,
         borderRadius: 10,
@@ -281,21 +268,17 @@ CardPequeno_container: {
         justifyContent: 'center',
     },
 
-    // Cor específica do botão de editar
     CardCadastro_buttonEdit: {
-        backgroundColor: '#1E40AF', // Azul escuro
+        backgroundColor: '#1E40AF', 
     },
 
-    // Cor específica do botão de deletar
     CardCadastro_buttonDelete: {
-        backgroundColor: '#DC2626', // Vermelho
+        backgroundColor: '#DC2626', 
     },
 
-    // Estilo dos ícones DENTRO dos botões
     CardCadastro_buttonIcon: {
         width: 24,
         height: 24,
-        // IMPORTANTE: Isso torna seus ícones (buttonEdit/buttonDelete) brancos!
         tintColor: '#FFFFFF', 
     },
 

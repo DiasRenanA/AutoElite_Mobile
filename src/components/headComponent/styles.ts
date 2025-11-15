@@ -7,6 +7,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+        
     },
     containerButtons: {
         display: 'flex',
@@ -14,7 +15,7 @@ export const Styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '50%',
+        width: '60%',
         gap: 2,
     },
     button:{
@@ -22,13 +23,13 @@ export const Styles = StyleSheet.create({
         borderColor: '#C4151C',
         borderStyle: 'solid', 
         borderRadius: 20,
-        paddingHorizontal: 10,
+        paddingHorizontal: 5,
         paddingVertical: 5,
     },
     textButton: {
         color: '#C4151C',
         fontSize: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
 
     containerAdmLoja: {
