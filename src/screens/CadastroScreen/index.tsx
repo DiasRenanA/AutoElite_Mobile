@@ -1,12 +1,17 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
 import { router } from "expo-router";
-import { Image, ScrollView, Text, TextInput, View } from "react-native";
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroScreen = () => {
     const proximo = () => {
         router.push('/cadastroTipo');
     };
+
+    const irParaLogin = () => {
+        router.push('/login');
+    };
+
     return(
         <ScrollView>
             <View style={Styles.container}>
@@ -39,7 +44,9 @@ export const CadastroScreen = () => {
                     onPress={proximo}
                 />
                 <View style={{paddingTop: 20}}>
-                    <Text style={Styles.boxText}>É Elite? Clique aqui!</Text>
+                    <TouchableOpacity style={{}} onPress={irParaLogin} activeOpacity={0.7}>
+                        <Text style={Styles.boxText}>É Elite? Clique aqui!</Text>
+                    </TouchableOpacity>
                 </View>
 
             </View>

@@ -33,7 +33,7 @@ export const Styles = StyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: 30,
         paddingVertical: 30,
-        width: '70%',
+        width: '80%',
     },
 
     textH1:{

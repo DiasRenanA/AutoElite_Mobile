@@ -75,6 +75,11 @@ export const LoginScreens = () => {
         router.push('/(private)/adminPanel');
     };
 
+    const irParaCadastro = () => {
+        router.push('/cadastro');
+    };
+
+
     return(
         <ScrollView>
             <View style={Styles.container}>
@@ -115,9 +120,11 @@ export const LoginScreens = () => {
                     onPress={handleLogin}
                 />
                 <View style={{paddingTop: 20}}>
-                    <Text style={Styles.boxText}>Esqueceu a senha?</Text>
-                    <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
+                    <TouchableOpacity style={{}} onPress={irParaCadastro} activeOpacity={0.7}>
+                        <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
+                    </TouchableOpacity>
                 </View>
+
                 <TouchableOpacity style={{}} onPress={irParaAdm} activeOpacity={0.7}>
                     <Text>Admin</Text>
                 </TouchableOpacity>

@@ -5,9 +5,8 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 
 export const unstable_settings = {
-  initialRouteName: '(public)',
+  initialRouteName: '(private)',
 };
-
 
 function RootLayoutNav() {
   const { token, isLoading } = useAuth();
@@ -19,10 +18,10 @@ function RootLayoutNav() {
 
     const inAuthGroup = segments[0] === '(public)';
     if (!token && !inAuthGroup) {
-      router.replace('/(public)/home');
+      router.replace('/(public)/login');
     } 
     else if (token && inAuthGroup) {
-      router.replace('/inicio');
+      router.replace('/(private)/inicio');
     }
   }, [token, isLoading, segments]); 
 
