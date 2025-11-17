@@ -1,73 +1,52 @@
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { SplashScreen, Stack, router } from 'expo-router';
+import { AuthProvider, useAuth } from '@/src/context/AuthContext'; // Ajuste o caminho
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { Text } from 'react-native';
-import 'react-native-reanimated';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { AuthProvider, useAuth } from '@/src/contexts/AuthContext';
-
-// Previna a splash screen
-SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
-  anchor: 'index',
+  initialRouteName: '(private)',
 };
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function RootLayoutNav() {
+  const { token, isLoading } = useAuth();
+  const router = useRouter();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(public)';
+    if (!token && !inAuthGroup) {
+      router.replace('/(public)/login');
+    } 
+    else if (token && inAuthGroup) {
+      router.replace('/(private)/inicio');
+    }
+  }, [token, isLoading, segments]); 
+
+  if (isLoading) {
+    return <View />; 
+  }
 
   return (
-    <AuthProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <StatusBar style="auto" /> 
-        <LayoutNavigator />
-      </ThemeProvider>
-    </AuthProvider>
+    <Stack>
+      <Stack.Screen name="(private)" options={{ headerShown: false }} />
+      <Stack.Screen name="(public)" options={{ headerShown: false }} />
+      <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+      <Stack.Screen name="cadastroEnderecoCliente" options={{ title: 'Endereço Cliente' }} />
+      <Stack.Screen name="cadastroEnderecoLoja" options={{ title: 'Endereço Loja' }} />
+      <Stack.Screen name="cadastroTipo" options={{ title: 'Tipo de Cadastro' }} />
+    </Stack>
   );
 }
 
-function LayoutNavigator() {
-  const { token, isLoading } = useAuth();
-  const colorScheme = useColorScheme(); // Você pode precisar disso aqui
-  
-  // Hook para esconder a splash screen
-  useEffect(() => {
-    if (!isLoading) {
-      SplashScreen.hideAsync();
-    }
-  }, [isLoading]);
-
-  // Hook para redirecionar o usuário
-  useEffect(() => {
-    if (isLoading) {
-      return; // Ainda carregando
-    }
-
-    if (token) {
-      // Logado: vá para o painel de admin (ou tela principal)
-      router.replace('/adminPanel');
-    } else {
-      // Deslogado: vá para o login
-      router.replace('/login');
-    }
-  }, [token, isLoading]);
-
-  // Mostra um loading enquanto o token é verificado
-  if (isLoading) {
-    return <Text>Carregando...</Text>; // Pode ser um componente Spinner
-  }
-
-  // Define as telas que o Expo Router deve conhecer
+export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen name="adminPanel" options={{ headerShown: false }} />
-      
-      {/* Suas telas originais */}
-      <Stack.Screen name="hindexome" options={{ headerShown: false }} /> 
-      <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-    </Stack>
+    <AuthProvider>
+      <RootLayoutNav />
+      <StatusBar style="auto" />
+    </AuthProvider>
   );
 }

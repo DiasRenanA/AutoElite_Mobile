@@ -1,4 +1,5 @@
 import { Head } from "@/src/components/headComponent/head";
+import { useAuth } from "@/src/context/AuthContext";
 import { router } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
@@ -8,9 +9,13 @@ export const PerfilScreen = () => {
         router.push('/cadastroTipo');
     };
 
+    const { logout } = useAuth(); 
+
     const sair = () => {
-        router.push('/');
-    };
+        // 4. Chame a função logout() do contexto
+        logout();
+        // Não precisa de router.push! O _layout.tsx cuida disso.
+    };
     return(
         <ScrollView contentContainerStyle={Styles.container}>
             <Head />

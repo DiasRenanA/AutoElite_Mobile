@@ -74,6 +74,7 @@ export const InicioScreen = () => {
 
     return(
         <ScrollView>
+
             <View style={Styles.container}>
                 <Head/>
                 <Input/>

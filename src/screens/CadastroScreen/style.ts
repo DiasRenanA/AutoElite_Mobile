@@ -11,6 +11,14 @@ export const Styles = StyleSheet.create({
         marginBottom: 20,
     },
 
+    textError: {
+        color: '#FF3B30', 
+        fontSize: 14,
+        textAlign: 'center',
+        marginBottom: 10,
+        fontWeight: 'bold',
+    },
+
     containerRed:{
         display: 'flex',
         flexDirection: 'column',

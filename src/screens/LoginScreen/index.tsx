@@ -1,44 +1,77 @@
-
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/contexts/AuthContext";
+import { useAuth } from "@/src/context/AuthContext";
 import { router } from "expo-router";
-import { useState } from "react";
-import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Styles } from "./style"; // Assumindo que você tem um arquivo de estilo
+import { useState } from "react"; // Importa o useState
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Styles } from "./style";
 
-// Se este arquivo for app/login.tsx, ele deve exportar por padrão
-export default function LoginScreen() {
-    const { signIn } = useAuth();
+
+export const LoginScreens = () => { 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [erro, setErro] = useState<string | null>(null);
+    const handleEmailChange = (text: string) => {
+        if (erro) setErro(null);
+        setEmail(text);
+    };
 
-    const handleLogin = async () => {
-        if (isLoading) return;
-        setIsLoading(true);
-        try {
-            await signIn(email, password);
-            // O redirecionamento é automático pelo _layout.tsx
-            
-        } catch (error) {
-            // Verificação correta do tipo de erro
-            let errorMessage = "Não foi possível logar. Tente novamente.";
-            if (error instanceof Error) {
-                errorMessage = error.message;
-            }
-            Alert.alert("Erro de Login", errorMessage);
-
-        } finally {
-            setIsLoading(false);
-        }
+    const handlePasswordChange = (text: string) => {
+        if (erro) setErro(null); 
+        setPassword(text);
     };
     
-    const irParaAdm = () => {
-        router.push('/adminPanel');
+    const { login } = useAuth();
+
+    const handleLogin = async () => {
+        setErro(null); 
+
+        if (!email || !password) {
+            setErro('Preencha e-mail e senha.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3001/usuarios/login', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    email_usuario: email, 
+                    pass_usuario: password 
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'E-mail ou senha inválidos.');
+            }
+
+            if (!data.token) {
+                throw new Error(data.message || 'Login falhou, mas a API não retornou um token.');
+            }
+
+            if (data.token) {
+                await login(data.token);
+            }
+
+        } catch (error: any) {
+            setErro(error.message || 'Não foi possível conectar.');        }
     };
 
+    const irParaAdm = () => {
+        router.push('/(private)/adminPanel');
+    };
+
+    const irParaCadastro = () => {
+        router.push('/cadastro');
+    };
+
+
     return(
-        <View style={Styles.container}>
+        <ScrollView>
+            <View style={Styles.container}>
             <Image
                 source={require('@/src/assets/images/LogoAutoElite.svg')}
                 resizeMode="contain"
@@ -50,7 +83,7 @@ export default function LoginScreen() {
                     <TextInput
                         style={Styles.textInput}
                         value={email}
-                        onChangeText={setEmail}
+                        onChangeText={handleEmailChange}
                         keyboardType="email-address"
                         autoCapitalize="none"
                     />
@@ -60,24 +93,35 @@ export default function LoginScreen() {
                     <TextInput
                         style={Styles.textInput}
                         value={password}
-                        onChangeText={setPassword}
+                        onChangeText={handlePasswordChange}
                         secureTextEntry
                     />
                 </View>
+
+                {erro && (
+                    <Text style={Styles.textError}> 
+                        {erro}
+                    </Text>
+                )}
+
                 <ButtonEnviar 
-                    titulo={isLoading ? "Entrando..." : "Entrar"}
+                    titulo="Entrar"
                     onPress={handleLogin}
                 />
                 <View style={{paddingTop: 20}}>
-                    <Text style={Styles.boxText}>Esqueceu a senha?</Text>
-                    <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
+                    <TouchableOpacity style={{}} onPress={irParaCadastro} activeOpacity={0.7}>
+                        <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
+                    </TouchableOpacity>
                 </View>
+
                 <TouchableOpacity style={{}} onPress={irParaAdm} activeOpacity={0.7}>
-                    <Text>Admin (Temporário)</Text>
+                    <Text>Admin</Text>
                 </TouchableOpacity>
 
             </View>
 
         </View>
+        </ScrollView>
+        
     )
 }
