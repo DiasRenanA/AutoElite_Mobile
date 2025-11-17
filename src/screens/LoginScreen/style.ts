@@ -12,7 +12,7 @@ export const Styles = StyleSheet.create({
     },
 
     textError: {
-    color: '#FF3B30', // Um vermelho para indicar erro
+    color: '#FF3B30', 
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 10,

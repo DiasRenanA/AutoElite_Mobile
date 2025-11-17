@@ -1,14 +1,22 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroTipoScreen = () => {
+    const { token } = useLocalSearchParams<{ token: string }>();
+
     const irParaCadastroCliente = () => {
-        router.push('/cadastroCliente');
+        router.push({
+            pathname: '/(public)/cadastroCliente', 
+            params: { token: token } 
+        });
     };
 
     const irParaCadastroLoja = () => {
-        router.push('/cadastroLoja');
+        router.push({
+            pathname: '/(public)/cadastroLoja', 
+            params: { token: token }
+        });
     };
 
     return(
