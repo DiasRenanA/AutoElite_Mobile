@@ -8,6 +8,15 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         gap: 30,
+        marginBottom: 50,
+    },
+
+    textError: {
+    color: '#FF3B30', // Um vermelho para indicar erro
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 10,
+    fontWeight: 'bold',
     },
 
     containerRed:{
@@ -38,7 +47,7 @@ export const Styles = StyleSheet.create({
     textInput:{
         backgroundColor: '#fff',
         borderRadius: 5,
-        paddingVertical: 3,
+        paddingVertical: 10,
         paddingHorizontal: 8,
         marginBottom: 15,
         

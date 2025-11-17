@@ -2,6 +2,7 @@ import { CardPequeno } from "@/src/components/cardComponent/card"
 import { Head } from "@/src/components/headComponent/head"
 import { Input } from "@/src/components/inputComponent"
 import { Rodape } from "@/src/components/rodapeComponent/rodape"
+import { useAuth } from "@/src/context/AuthContext"
 import { router } from "expo-router"
 import { Image, ScrollView, Text, View } from "react-native"
 import { Styles } from "./style"
@@ -40,8 +41,20 @@ export const InicioScreen = () => {
         router.push('/productPage')
     }
 
+    
+    const { token, logout } = useAuth();
+
     return(
         <ScrollView>
+            <Text style={{ textAlign: 'center' }}>
+                    Seu token de sessão salvo é:
+                </Text>
+
+                {/* 2. Mostra o token na tela */}
+                <Text style={{ fontSize: 12, color: 'gray' }}>
+                    {token}
+                </Text>
+
             <View style={Styles.container}>
                 <Head/>
                 <Input/>

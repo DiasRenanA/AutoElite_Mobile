@@ -1,24 +1,49 @@
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { AuthProvider, useAuth } from '@/src/context/AuthContext'; // Ajuste o caminho
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 
 export const unstable_settings = {
-  anchor: 'index',
+  initialRouteName: '(public)',
 };
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+
+function RootLayoutNav() {
+  const { token, isLoading } = useAuth();
+  const router = useRouter();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(public)';
+    if (!token && !inAuthGroup) {
+      router.replace('/(public)/home');
+    } 
+    else if (token && inAuthGroup) {
+      router.replace('/inicio');
+    }
+  }, [token, isLoading, segments]); 
+
+  if (isLoading) {
+    return <View />; 
+  }
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="hindexome" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
+    <Stack>
+      <Stack.Screen name="(private)" options={{ headerShown: false }} />
+      <Stack.Screen name="(public)" options={{ headerShown: false }} />
+      <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
       <StatusBar style="auto" />
-    </ThemeProvider>
+    </AuthProvider>
   );
 }
