@@ -3,37 +3,71 @@ import { Head } from "@/src/components/headComponent/head"
 import { Input } from "@/src/components/inputComponent"
 import { Rodape } from "@/src/components/rodapeComponent/rodape"
 import { router } from "expo-router"
-import { Image, ScrollView, Text, View } from "react-native"
+import { useEffect, useState } from "react"
+import { Image, ScrollView, Text, View, } from "react-native"
 import { Styles } from "./style"
 
-const carouselData = [
-    {
-        id: '1',
-        title: 'Volante',
-        imageSource: require('@/src/assets/images/volante.png'),
-        distance: '3.2 km de você'
-    },
-    {
-        id: '2',
-        title: 'Pneus',
-        imageSource: require('@/src/assets/images/volante.png'), // Imagem de exemplo
-        distance: '1.5 km de você'
-    },
-    {
-        id: '3',
-        title: 'Motor',
-        imageSource: require('@/src/assets/images/volante.png'), // Imagem de exemplo
-        distance: '5.0 km de você'
-    },
-    {
-        id: '4',
-        title: 'Óleo',
-        imageSource: require('@/src/assets/images/volante.png'), // Imagem de exemplo
-        distance: '2.1 km de você'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+
+const API_URL = "http://localhost:3001/produtos_loja/";
+
+
+export async function listar(nomes = [], categoria = null) {
+
+    const token = await AsyncStorage.getItem('token');
+
+    const dadosUsuario = {
+        nomes: nomes,
+        categoria: categoria,
+    };
+
+    try {
+        let response = await fetch(API_URL + "listar/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...(token && { "authorization": "Bearer " + token })
+            },
+            body: JSON.stringify(dadosUsuario),
+        });
+
+        const respostaJson = await response.json();
+
+        const mensagem = respostaJson.message;
+
+        if (response.status !== 200) {
+            return [null, mensagem];
+        }
+
+        return [respostaJson, mensagem];
+
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        return [null, "Erro na requisição"];
     }
-];
+}
+
+
 
 export const InicioScreen = () => {
+    const [produtos, setProdutos] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function carregarProdutos() {
+            const [resposta, mensagem] = await listar();
+
+            if (resposta) {
+                console.log("Produtos recebidos:", resposta.produtos_loja);
+                setProdutos(resposta.produtos_loja);
+            }
+        }
+
+        carregarProdutos();
+    }, []);
+
+
     const irParaProductPage = () =>{
         router.push('/productPage')
     }
@@ -48,13 +82,13 @@ export const InicioScreen = () => {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 >
-                    {carouselData.map((item) => (
+                    {produtos.map((item) => (
                         <CardPequeno
-                            key={item.id}
+                            key={item.id_produto_loja}
                             onPress={irParaProductPage}
-                            title={item.title}
-                            imageSource={item.imageSource}
-                            distance={item.distance}
+                            title={item.produto.nome_produto}
+                            imageSource={{ uri: item.produto.img }}
+                            distance={"Descubra a distância deste produto"}
                         />
                     ))}
                 </ScrollView>

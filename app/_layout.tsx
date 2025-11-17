@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 
+
 export const unstable_settings = {
   initialRouteName: '(private)',
 };
