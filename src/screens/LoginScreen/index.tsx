@@ -1,3 +1,4 @@
+
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
 import { router } from "expo-router";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
