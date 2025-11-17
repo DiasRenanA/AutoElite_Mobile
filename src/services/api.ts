@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { getToken } from '../utils/authStorage';
 
+import { getToken } from '../utils/storage'; // Ajuste o caminho se necessário
+
+// Use a URL da sua API
 const api = axios.create({
-  baseURL: 'https://sua-api.com/v1',
+  baseURL: 'http://localhost:3001', 
 });
-
 
 api.interceptors.request.use(
   async (config) => {
