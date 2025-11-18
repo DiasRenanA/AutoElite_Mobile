@@ -2,13 +2,18 @@ import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
 import { useAuth } from "@/src/context/AuthContext";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, Image, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroEnderecoClienteScreen = () => {
 
-    const { token } = useLocalSearchParams<{ token: string }>();
+    // 1. Pega os dois tokens da rota (assumindo que a tela anterior os enviou)
+    const { userToken, clientDataToken } = useLocalSearchParams<{ userToken: string, clientDataToken: string }>();
+    
+    // Pega a função final de login
     const { login } = useAuth();
+    
+    // ... Seus states (cep, rua, etc.)
     const [erro, setErro] = useState<string | null>(null);
     const [cep, setCep] = useState('');
     const [rua, setRua] = useState('');
@@ -19,33 +24,33 @@ export const CadastroEnderecoClienteScreen = () => {
     const [complemento, setComplemento] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-const handleSaveAddressAndLogin = async () => {
+    const handleSaveAddressAndLogin = async () => {
         setErro(null); 
 
-        if (isLoading) return;
-
-        // Validação básica
+        // Validações...
         if (!cep || !rua || !bairro || !cidade || !uf || !nmr) {
-            setErro('Erro: Preencha todos os campos obrigatórios (CEP, Rua, Bairro, Cidade, UF, Nmr).');
+            setErro('Erro: Preencha todos os campos obrigatórios.');
             return;
         }
         
-        // Garante que o token existe
-        if (!token) {
-             setErro('Erro fatal: Token não encontrado. Por favor, tente o cadastro novamente.');
-             router.replace('/(public)/cadastro');
-             return;
+        // 2. Valida se os tokens existem
+        if (!userToken || !clientDataToken) {
+            Alert.alert('Erro fatal', 'Tokens de sessão não encontrados. Reinicie o cadastro.');
+            router.replace('/(public)/cadastro');
+            return;
         }
 
         setIsLoading(true);
         try {
-            // 🚨 Use o IP da sua máquina no lugar de 'localhost'
+            // 3. Chamada à API de criação de endereço
             const response = await fetch('http://localhost:3001/enderecos/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // AQUI usamos o token para autorizar
-                    'Authorization': `Bearer ${token}` 
+                    // 🔑 HEADER 1: Token de Dados do Cliente (Vindo da tela anterior)
+                    'token_dados': clientDataToken, 
+                    // 🔑 HEADER 2: Token de Autenticação do Usuário (Vindo da tela de Cadastro Inicial)
+                    'Authorization': `Bearer ${userToken}` 
                 },
                 body: JSON.stringify({
                     cep: cep,
@@ -61,27 +66,24 @@ const handleSaveAddressAndLogin = async () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Se der erro (ex: CEP inválido), mostra o erro da API
                 setErro(data.message || 'Não foi possível salvar o endereço.');
+                return;
             }
 
-            // SUCESSO! Endereço salvo.
-            // 8. AGORA SIM, chamamos o login()
-            await login(token);
+            // 4. SUCESSO! Endereço salvo. Agora fazemos o login final.
             
-            // O _layout.tsx (raiz) vai ver a mudança no token e
-            // vai te redirecionar para '/(private)/inicio' automaticamente.
-            // A função 'proximo' original não é mais necessária aqui.
+            // O token mais recente (userToken ou clientDataToken) deve ser salvo.
+            // Para garantir a sessão completa, vamos usar o token do usuário (userToken).
+            await login(userToken);
+            
+            // 5. O _layout.tsx (raiz) verá a mudança e redirecionará para '/(private)/inicio'
+            Alert.alert("Sucesso!", "Cadastro completo! Entrando no app.");
 
         } catch (error: any) {
-            setErro('Erro ao Salvar');
+            setErro(error.message || 'Erro ao Salvar Endereço.');
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const proximo = () => {
-        router.push('/inicio')
     };
 
     return(
@@ -143,7 +145,7 @@ const handleSaveAddressAndLogin = async () => {
                     </View>
 
                     {erro && (
-                        <Text style={Styles.textError}> 
+                        <Text style={{ color: 'red', textAlign: 'center', marginTop: 10 }}> 
                             {erro}
                         </Text>
                     )}
