@@ -21,9 +21,6 @@ function RootLayoutNav() {
     if (!token && !inAuthGroup) {
       router.replace('/(public)/login');
     } 
-    else if (token && inAuthGroup) {
-      router.replace('/(private)/inicio');
-    }
   }, [token, isLoading, segments]); 
 
   if (isLoading) {
@@ -35,9 +32,6 @@ function RootLayoutNav() {
       <Stack.Screen name="(private)" options={{ headerShown: false }} />
       <Stack.Screen name="(public)" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      <Stack.Screen name="cadastroEnderecoCliente" options={{ title: 'Endereço Cliente' }} />
-      <Stack.Screen name="cadastroEnderecoLoja" options={{ title: 'Endereço Loja' }} />
-      <Stack.Screen name="cadastroTipo" options={{ title: 'Tipo de Cadastro' }} />
     </Stack>
   );
 }

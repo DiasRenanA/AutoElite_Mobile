@@ -9,7 +9,11 @@ export const CadastroEnderecoClienteScreen = () => {
 
     // 1. Pega os dois tokens da rota (assumindo que a tela anterior os enviou)
     const { userToken, clientDataToken } = useLocalSearchParams<{ userToken: string, clientDataToken: string }>();
-    
+
+
+console.log('t1 ',userToken)
+console.log('t2 ',clientDataToken)
+
     // Pega a função final de login
     const { login } = useAuth();
     
@@ -63,6 +67,8 @@ export const CadastroEnderecoClienteScreen = () => {
                 })
             });
 
+            console.log('resposta api',response)
+
             const data = await response.json();
 
             if (!response.ok) {
@@ -70,19 +76,14 @@ export const CadastroEnderecoClienteScreen = () => {
                 return;
             }
 
-            // 4. SUCESSO! Endereço salvo. Agora fazemos o login final.
-            
-            // O token mais recente (userToken ou clientDataToken) deve ser salvo.
-            // Para garantir a sessão completa, vamos usar o token do usuário (userToken).
-            await login(userToken);
-            
-            // 5. O _layout.tsx (raiz) verá a mudança e redirecionará para '/(private)/inicio'
             Alert.alert("Sucesso!", "Cadastro completo! Entrando no app.");
+
+            await login(userToken);
+                        
+            router.replace('/(private)/inicio');
 
         } catch (error: any) {
             setErro(error.message || 'Erro ao Salvar Endereço.');
-        } finally {
-            setIsLoading(false);
         }
     };
 
