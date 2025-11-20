@@ -1,23 +1,16 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/context/AuthContext";
-import { router, useLocalSearchParams } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext"; // Certifique-se que o caminho é 'context' (singular)
+import { router } from "expo-router"; // Removemos useLocalSearchParams
 import { useState } from "react";
 import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroEnderecoClienteScreen = () => {
 
-    // 1. Pega os dois tokens da rota (assumindo que a tela anterior os enviou)
-    const { userToken, clientDataToken } = useLocalSearchParams<{ userToken: string, clientDataToken: string }>();
+    // 1. Pegamos os tokens direto do Contexto (Cofre)
+    const { token, clientToken } = useAuth(); 
 
-
-console.log('t1 ',userToken)
-console.log('t2 ',clientDataToken)
-
-    // Pega a função final de login
-    const { login } = useAuth();
-    
-    // ... Seus states (cep, rua, etc.)
+    // Estados do formulário
     const [erro, setErro] = useState<string | null>(null);
     const [cep, setCep] = useState('');
     const [rua, setRua] = useState('');
@@ -31,30 +24,30 @@ console.log('t2 ',clientDataToken)
     const handleSaveAddressAndLogin = async () => {
         setErro(null); 
 
-        // Validações...
+        // Validação dos campos
         if (!cep || !rua || !bairro || !cidade || !uf || !nmr) {
             setErro('Erro: Preencha todos os campos obrigatórios.');
             return;
         }
         
-        // 2. Valida se os tokens existem
-        if (!userToken || !clientDataToken) {
-            Alert.alert('Erro fatal', 'Tokens de sessão não encontrados. Reinicie o cadastro.');
+        // 2. Validação de Segurança: Verifica se os tokens estão no contexto
+        if (!token || !clientToken) {
+            Alert.alert('Sessão Expirada', 'Tokens não encontrados. Reinicie o cadastro.');
             router.replace('/(public)/cadastro');
             return;
         }
 
         setIsLoading(true);
+
         try {
-            // 3. Chamada à API de criação de endereço
             const response = await fetch('http://localhost:3001/enderecos/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 🔑 HEADER 1: Token de Dados do Cliente (Vindo da tela anterior)
-                    'token_dados': clientDataToken, 
-                    // 🔑 HEADER 2: Token de Autenticação do Usuário (Vindo da tela de Cadastro Inicial)
-                    'Authorization': `Bearer ${userToken}` 
+                    // 🔑 HEADER 1: Token de Dados do Cliente (do Contexto)
+                    'token_dados': clientToken, 
+                    // 🔑 HEADER 2: Token de Autenticação do Usuário (do Contexto)
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
                     cep: cep,
@@ -67,23 +60,23 @@ console.log('t2 ',clientDataToken)
                 })
             });
 
-            console.log('resposta api',response)
-
             const data = await response.json();
 
             if (!response.ok) {
-                setErro(data.message || 'Não foi possível salvar o endereço.');
-                return;
+                throw new Error(data.message || 'Não foi possível salvar o endereço.');
             }
 
+            // SUCESSO!
             Alert.alert("Sucesso!", "Cadastro completo! Entrando no app.");
 
-            await login(userToken);
-                        
+            // 3. Como você desligou o redirecionamento automático no _layout,
+            // fazemos a navegação manual para a área privada agora.
             router.replace('/(private)/inicio');
 
         } catch (error: any) {
             setErro(error.message || 'Erro ao Salvar Endereço.');
+        } finally {
+            setIsLoading(false);
         }
     };
 

@@ -1,5 +1,5 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/context/AuthContext";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -40,10 +40,8 @@ export const CadastroScreen = () => {
             }
 
             if (data.token) {
-                router.push({
-                    pathname: '/(public)/cadastroTipo',
-                    params: { token: data.token } 
-                });
+                await login(data.token);
+                router.push('/(public)/cadastroTipo');
 
             } else {
                 setErro("Cadastro OK, mas token não recebido.");

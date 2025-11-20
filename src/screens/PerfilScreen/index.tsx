@@ -1,5 +1,5 @@
 import { Head } from "@/src/components/headComponent/head";
-import { useAuth } from "@/src/context/AuthContext";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";

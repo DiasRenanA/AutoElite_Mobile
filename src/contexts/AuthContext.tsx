@@ -1,30 +1,36 @@
-import api from '@/src/services/api'; // ou '../services/api'
-import * as storage from '@/src/utils/storage'; // ou '../utils/storage'
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextData {
-  token: string | null;
+  token: string | null;      // Token do Usuário (Login/Cadastro)
+  clientToken: string | null; // Novo: Token de Dados do Cliente
   isLoading: boolean;
-  // Adicione os tipos string aqui:
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => void;
+  login: (token: string) => Promise<void>;
+  setClientDataToken: (token: string) => Promise<void>; // Novo: Função para salvar token do cliente
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [clientToken, setClientToken] = useState<string | null>(null); // Novo Estado
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadStorageData() {
       try {
-        const storedToken = await storage.getToken();
-        if (storedToken) {
-          setToken(storedToken);
-        }
+        // Carrega os dois tokens da memória
+        const [storedToken, storedClientToken] = await Promise.all([
+            AsyncStorage.getItem('userToken'),
+            AsyncStorage.getItem('clientToken')
+        ]);
+
+        if (storedToken) setToken(storedToken);
+        if (storedClientToken) setClientToken(storedClientToken);
+
       } catch (e) {
-        console.error(e);
+        console.error('Failed to load data', e);
       } finally {
         setIsLoading(false);
       }
@@ -32,37 +38,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadStorageData();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      const response = await api.post('/login', { email, password }); // Altere '/login' para sua rota de login
-      const { token }: { token: string } = response.data;
-      
-      setToken(token);
-      await storage.saveToken(token);
-
-    } catch (error) {
-      console.error("Erro no login:", error);
-      // Você pode ser mais específico aqui se sua API retornar um erro
-      throw new Error("Falha ao autenticar. Verifique suas credenciais.");
-    }
+  const login = async (newToken: string) => {
+    setToken(newToken);
+    await AsyncStorage.setItem('userToken', newToken);
   };
 
-  const signOut = async () => {
+  // Nova função para salvar o token do cliente
+  const setClientDataToken = async (newClientToken: string) => {
+    setClientToken(newClientToken);
+    await AsyncStorage.setItem('clientToken', newClientToken);
+  };
+
+  const logout = async () => {
     setToken(null);
-    await storage.deleteToken();
+    setClientToken(null);
+    await AsyncStorage.multiRemove(['userToken', 'clientToken']);
   };
 
   return (
-    <AuthContext.Provider value={{ token, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ 
+        token, 
+        clientToken, 
+        isLoading, 
+        login, 
+        setClientDataToken, // Exportando a nova função
+        logout 
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+export const useAuth = () => useContext(AuthContext);

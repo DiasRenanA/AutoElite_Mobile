@@ -1,28 +1,29 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
+import { useAuth } from "@/src/contexts/AuthContext"; // Importando do Contexto
 import { Picker } from '@react-native-picker/picker';
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, TextInput, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroClienteScreen = () => {
 
-    const { userToken } = useLocalSearchParams<{ userToken: string }>();
-
-    const { token } = useLocalSearchParams<{ token: string }>(); 
+    // 1. Pegamos o token (para o header) e a função (para salvar o novo token)
+    const { token, setClientDataToken } = useAuth(); 
 
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
     const [telefone, setTelefone] = useState('');
     const [genero, setGenero] = useState<string | number>('null');
     const [possuiCarro, setPossuiCarro] = useState<string | number>('null');
-    const [dtNascimento, setDtNascimento] = useState(''); // Campo obrigatório na API
+    const [dtNascimento, setDtNascimento] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [erro, setErro] = useState<string | null>(null);
 
     const handleCadastroCliente = async () => {
+        // Validação de segurança: Token existe?
         if (isLoading || !token) {
-            setErro('Token não encontrado ou carregando.');
+            setErro('Sessão inválida. Por favor, faça login novamente.');
             return;
         }
 
@@ -39,7 +40,7 @@ export const CadastroClienteScreen = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` 
+                    'Authorization': `Bearer ${token}` // Usando token do contexto
                 },
                 body: JSON.stringify({
                     cpf: cpf,
@@ -57,17 +58,17 @@ export const CadastroClienteScreen = () => {
                 throw new Error(data.message || 'Erro ao criar o perfil do cliente.');
             }
 
-            // Assumindo que a API retorna o NOVO token em data.token
-            const novoToken = data.token; 
+            const novoTokenCliente = data.token_dados; 
 
-            // Sucesso! Vai para a próxima tela, levando o NOVO token
-            router.push({
-                pathname: '/(public)/cadastroEnderecoCliente',
-                params: { 
-                    userToken: userToken,           // O token original do usuário
-                    clientDataToken: novoToken      // O token de dados do cliente (o segundo)
-                } 
-            });
+            // 2. AQUI MUDOU: Salvamos direto no Contexto/Sessão
+            if (novoTokenCliente) {
+                await setClientDataToken(novoTokenCliente);
+            } else {
+                throw new Error('API não retornou o token do cliente.');
+            }
+
+            // 3. Navegação limpa (sem passar parâmetros na URL)
+            router.push('/(public)/cadastroEnderecoCliente');
 
         } catch (error: any) {
             setErro(error.message || 'Erro de conexão/servidor.');

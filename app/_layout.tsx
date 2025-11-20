@@ -1,4 +1,4 @@
-import { AuthProvider, useAuth } from '@/src/context/AuthContext'; // Ajuste o caminho
+import { AuthProvider, useAuth } from '@/src/contexts/AuthContext'; // Ajuste o caminho
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
