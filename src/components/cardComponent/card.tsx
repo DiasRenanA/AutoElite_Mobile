@@ -12,6 +12,19 @@ type CardPequenoProps = {
     distance: string;
 };
 
+type CardGrandeProps = {
+    title: string;
+    imageSource: ImageSourcePropType;
+    distance: string;
+    razao: string;
+    fantasia: string;
+    tel: string;
+    cel: string;
+    cep: string;
+    rua: string;
+    uf: string;
+};
+
 type CardCadastroProps = {
     title: string;
     imageSource: any;
@@ -38,19 +51,14 @@ export function CardPequeno({ onPress, title, imageSource, distance }: CardPeque
     )
 }
 
-export function CardGrande() {
+export function CardGrande({title, imageSource, distance, razao, fantasia, tel, cel, cep, rua, uf}: CardGrandeProps) {
     return (
         <View style={Styles.CardGrande_container}>
-            <Text style={Styles.CardGrande_h2}>Volante Mercedes Mb 430mm Pequeno 608 710 1620 1935</Text>
+            <Text style={Styles.CardGrande_h2}>{title}</Text>
             <View style={Styles.CardGrande_productImagesContainer}>
                 <Image
                     style={Styles.CardGrande_productImage}
-                    source={require('@/src/assets/images/volante.png')}
-                    resizeMode="contain"
-                />
-                <Image
-                    style={Styles.CardGrande_productImage}
-                    source={require('@/src/assets/images/volante.png')} 
+                    source={imageSource}
                     resizeMode="contain"
                 />
             </View>
@@ -62,26 +70,26 @@ export function CardGrande() {
             </View>
 
             <View style={Styles.CardGrande_distanceBanner}>
-                <Text style={Styles.CardGrande_distanceBannerText}>Este produto está a 3.2 KM de você!</Text>
+                <Text style={Styles.CardGrande_distanceBannerText}>Este produto está a {distance} KM de você!</Text>
             </View>
 
             <View style={Styles.CardGrande_infoContainer}>
                 <Text style={Styles.CardGrande_sectionTitle}>Informações da loja:</Text>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Razão Social:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> ARCOS DOURADOS COMERCIO DE ALIMENTOS SA</Text>
+                    <Text style={Styles.CardGrande_infoValue}> {razao}</Text>
                 </View>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Nome Fantasia:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> Pedro Paulo</Text>
+                    <Text style={Styles.CardGrande_infoValue}> {fantasia}</Text>
                 </View>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Telefone:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> (11) 4196-9800</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{tel}</Text>
                 </View>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Celular:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> (11) 4196-9800</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{cel}</Text>
                 </View>
             </View>
 
@@ -95,15 +103,15 @@ export function CardGrande() {
                 <Text style={Styles.CardGrande_sectionTitle}>Informações do endereço:</Text>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>CEP:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> 06785050</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{cep}</Text>
                 </View >
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Rua:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> Rua Antônio Marcos Torres</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{rua}</Text>
                 </View >
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Estado:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> SP</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{uf}</Text>
                 </View>
             </View>
 

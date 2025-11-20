@@ -2,7 +2,6 @@ import { CardPequeno } from "@/src/components/cardComponent/card"
 import { Head } from "@/src/components/headComponent/head"
 import { Input } from "@/src/components/inputComponent"
 import { Rodape } from "@/src/components/rodapeComponent/rodape"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
 import { Image, ScrollView, Text, View, } from "react-native"
@@ -12,12 +11,10 @@ import { Styles } from "./style"
 
 
 const API_URL = "http://localhost:3001/produtos_loja/";
-
-let token:any = ""
+//const token_session = await AsyncStorage.getItem('token');
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkX3VzdWFyaW8iOjYsImVtYWlsX3VzdWFyaW8iOiJlc3NhZGlrNzUyQHVvcmFrLmNvbSIsInBhc3NfdXN1YXJpbyI6IiQyYiQxMCRkUzE3SHZnTGo4bkJCb0ZFc1dLL1R1OHZSbmpnM0xDSTlxY0s1N2hNcVA5RVNTNlUuWEhjZSIsInR5cGVVc2VyIjpudWxsLCJ2ZXJpZmljYWRvIjoiMjAyNS0wMS0wMVQwMzowMDowMC4wMDBaIn0sImlhdCI6MTc2MzY3MDQxOSwiZXhwIjoxNzYzNjc0MDE5fQ.2OSa-_JnrlhRPcRSHGdNz2ElVw8Wl6UgyYpxtBDNrgQ"
 
 export async function listar(nomes:string[] = [], categoria = null) {
-    const token_session = await AsyncStorage.getItem('token');
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkX3VzdWFyaW8iOjYsImVtYWlsX3VzdWFyaW8iOiJlc3NhZGlrNzUyQHVvcmFrLmNvbSIsInBhc3NfdXN1YXJpbyI6IiQyYiQxMCRkUzE3SHZnTGo4bkJCb0ZFc1dLL1R1OHZSbmpnM0xDSTlxY0s1N2hNcVA5RVNTNlUuWEhjZSIsInR5cGVVc2VyIjpudWxsLCJ2ZXJpZmljYWRvIjoiMjAyNS0wMS0wMVQwMzowMDowMC4wMDBaIn0sImlhdCI6MTc2MzUwOTE1NiwiZXhwIjoxNzYzNTEyNzU2fQ.l77Zx3aYZOXiXOTzOO0bB_AJsifzKxPd-lPE0ilNTP4"
     const dadosUsuario = {
         nomes: nomes,
         categoria: categoria,
@@ -72,8 +69,11 @@ export const InicioScreen = () => {
     }, []);
 
 
-    const irParaProductPage = () =>{
-        router.push('/productPage')
+    const irParaProductPage = (id_produto: number) =>{
+        router.push({
+            pathname: "/productPage",
+            params: { id: id_produto }
+        });
     }
 
     const handlePesquisa = async (textoDigitado: string) => {
@@ -107,7 +107,7 @@ export const InicioScreen = () => {
                         produtos.map((item) => (
                         <CardPequeno
                             key={item.id_produto_loja}
-                            onPress={irParaProductPage}
+                            onPress={() => irParaProductPage(item.id_produto_loja)}
                             title={limitarTexto(item.produto.nome_produto, 20)}
                             imageSource={{ uri: item.produto.img }}
 
