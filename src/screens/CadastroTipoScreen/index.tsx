@@ -1,22 +1,19 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext";
+import { router } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroTipoScreen = () => {
-    const { token } = useLocalSearchParams<{ token: string }>();
+    const { saveUserType } = useAuth();
 
-    const irParaCadastroCliente = () => {
-        router.push({
-            pathname: '/(public)/cadastroCliente', 
-            params: { token: token } 
-        });
+    const irParaCadastroCliente = async () => {
+        await saveUserType('cliente');
+        router.push('/(public)/cadastroCliente');
     };
 
-    const irParaCadastroLoja = () => {
-        router.push({
-            pathname: '/(public)/cadastroLoja', 
-            params: { token: token }
-        });
+    const irParaCadastroLoja = async () => {
+        await saveUserType('loja');
+        router.push('/(public)/cadastroLoja');
     };
 
     return(

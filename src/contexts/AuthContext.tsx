@@ -2,11 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextData {
-  token: string | null;      // Token do Usuário (Login/Cadastro)
-  clientToken: string | null; // Novo: Token de Dados do Cliente
+  token: string | null;
+  clientToken: string | null;
+  userType: 'cliente' | 'loja' | null; // 1. Novo campo para saber o tipo
   isLoading: boolean;
   login: (token: string) => Promise<void>;
-  setClientDataToken: (token: string) => Promise<void>; // Novo: Função para salvar token do cliente
+  setClientDataToken: (token: string) => Promise<void>;
+  saveUserType: (type: 'cliente' | 'loja' | null) => Promise<void>; // 2. Função para salvar o tipo
   logout: () => Promise<void>;
 }
 
@@ -14,20 +16,22 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [clientToken, setClientToken] = useState<string | null>(null); // Novo Estado
+  const [clientToken, setClientToken] = useState<string | null>(null);
+  const [userType, setUserType] = useState<'cliente' | 'loja' | null>(null); // 3. Estado
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadStorageData() {
       try {
-        // Carrega os dois tokens da memória
-        const [storedToken, storedClientToken] = await Promise.all([
+        const [storedToken, storedClientToken, storedType] = await Promise.all([
             AsyncStorage.getItem('userToken'),
-            AsyncStorage.getItem('clientToken')
+            AsyncStorage.getItem('clientToken'),
+            AsyncStorage.getItem('userType') // 4. Carrega o tipo
         ]);
 
         if (storedToken) setToken(storedToken);
         if (storedClientToken) setClientToken(storedClientToken);
+        if (storedType) setUserType(storedType as 'cliente' | 'loja');
 
       } catch (e) {
         console.error('Failed to load data', e);
@@ -43,25 +47,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await AsyncStorage.setItem('userToken', newToken);
   };
 
-  // Nova função para salvar o token do cliente
   const setClientDataToken = async (newClientToken: string) => {
     setClientToken(newClientToken);
     await AsyncStorage.setItem('clientToken', newClientToken);
   };
 
+  // 5. Implementação da função para salvar tipo
+  const saveUserType = async (type: 'cliente' | 'loja') => {
+    setUserType(type);
+    await AsyncStorage.setItem('userType', type);
+  };
+
   const logout = async () => {
     setToken(null);
     setClientToken(null);
-    await AsyncStorage.multiRemove(['userToken', 'clientToken']);
+    setUserType(null);
+    await AsyncStorage.multiRemove(['userToken', 'clientToken', 'userType']);
   };
 
   return (
     <AuthContext.Provider value={{ 
         token, 
-        clientToken, 
+        clientToken,
+        userType, // Exporta o estado
         isLoading, 
         login, 
-        setClientDataToken, // Exportando a nova função
+        setClientDataToken, 
+        saveUserType, // Exporta a função
         logout 
     }}>
       {children}
