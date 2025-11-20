@@ -43,14 +43,13 @@ export const Head = () => {
                     <Text style={Styles.textButton}>Como funcionamos</Text>
                 </TouchableOpacity> 
 
-                {/* 3. RENDERIZAÇÃO CONDICIONAL: Só aparece se for LOJA */}
                 {userType === 'loja' && (
                     <TouchableOpacity 
-                        style={[Styles.button, { backgroundColor: '#FFD700' }]} // Exemplo: cor diferente para destaque
+                        style={Styles.button} 
                         onPress={irParaAdminPanel} 
                         activeOpacity={0.7}
                     >
-                        <Text style={[Styles.textButton, { color: '#000', fontWeight: 'bold' }]}>
+                        <Text style={Styles.textButton}>
                             Painel Loja
                         </Text>
                     </TouchableOpacity> 
@@ -83,13 +82,20 @@ export const HeadAdmLoja = () => {
         router.push('/adminPanelLoja') 
     } 
 
+    const irParaInicio = () => {
+        router.push('/inicio');
+    };
+
     return(
         <View style={Styles.containerAdmLoja}>
-            <Image
-                style={Styles.logo} 
-                source={require('@/src/assets/images/LogoAutoElite.svg')}
-                resizeMode="contain"
-            />
+            <TouchableOpacity onPress={irParaInicio}>
+                <Image
+                    style={Styles.logo} 
+                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    resizeMode="contain"
+                />
+            </TouchableOpacity>
+
 
             <TouchableOpacity onPress={irParaAdminPanelLoja} activeOpacity={0.7}>
                 <Text style={Styles.containerAdmLojaText}>Produtos</Text> 

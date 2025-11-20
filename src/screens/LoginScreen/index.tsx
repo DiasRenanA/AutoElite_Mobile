@@ -111,13 +111,19 @@ export default function LoginScreens() {
         router.push('/cadastro');
     };
 
+    const irParaHome = () => {
+        router.push('/(public)/home');
+    };
+
     return(
         <ScrollView>
             <View style={Styles.container}>
-                <Image
-                    source={require('@/src/assets/images/LogoAutoElite.svg')}
-                    resizeMode="contain"
-                />
+                <TouchableOpacity onPress={irParaHome}>
+                    <Image
+                        source={require('@/src/assets/images/LogoAutoElite.svg')}
+                        resizeMode="contain"
+                    />
+                </TouchableOpacity>
                 <View style={Styles.containerRed}>
                     <Text style={Styles.textH1}>Login</Text>
                     

@@ -52,7 +52,6 @@ export const CadastroScreen = () => {
         }
     }
 
-
     const irParaLogin = () => {
         router.push('/login');
     };
@@ -61,62 +60,69 @@ export const CadastroScreen = () => {
         router.push('/cadastroTipo');
     };
 
+    const irParaHome = () => {
+        router.push('/(public)/home');
+    };
+
     return(
         <ScrollView>
             <View style={Styles.container}>
-            <Image
-                source={require('@/src/assets/images/LogoAutoElite.svg')}
-                resizeMode="contain"
-            />
-            <View style={Styles.containerRed}>
-                <Text style={Styles.textH1}>Cadastro</Text>
-                <View style={{display:'flex',gap:5}}>
-                    <Text style={Styles.textLabel}>E-mail:</Text>
-                    <TextInput
-                        style={Styles.textInput}
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
+                <TouchableOpacity onPress={irParaHome}>
+                    <Image
+                        source={require('@/src/assets/images/LogoAutoElite.svg')}
+                        resizeMode="contain"
                     />
-                </View>
-                <View style={{display:'flex',gap:5}}>
-                    <Text style={Styles.textLabel}>Senha:</Text>
-                    <TextInput
-                        style={Styles.textInput}
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry
+                </TouchableOpacity>
+
+                <View style={Styles.containerRed}>
+                    <Text style={Styles.textH1}>Cadastro</Text>
+                    <View style={{display:'flex',gap:5}}>
+                        <Text style={Styles.textLabel}>E-mail:</Text>
+                        <TextInput
+                            style={Styles.textInput}
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                    </View>
+                    <View style={{display:'flex',gap:5}}>
+                        <Text style={Styles.textLabel}>Senha:</Text>
+                        <TextInput
+                            style={Styles.textInput}
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
+                    <View style={{display:'flex',gap:5}}>
+                        <Text style={Styles.textLabel}>Confirmação de Senha:</Text>
+                        <TextInput
+                            style={Styles.textInput}
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                            secureTextEntry
+                        />
+                    </View>
+
+                    {erro && (
+                        <Text style={Styles.textError}> 
+                            {erro}
+                        </Text>
+                    )}
+
+                    <ButtonEnviar 
+                        titulo="Cadastrar"
+                        onPress={handleCadastro}
                     />
-                </View>
-                <View style={{display:'flex',gap:5}}>
-                    <Text style={Styles.textLabel}>Confirmação de Senha:</Text>
-                    <TextInput
-                        style={Styles.textInput}
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        secureTextEntry
-                    />
-                </View>
+                    <View style={{paddingTop: 20}}>
+                        <TouchableOpacity style={{}} onPress={irParaLogin} activeOpacity={0.7}>
+                            <Text style={Styles.boxText}>É Elite? Clique aqui!</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                {erro && (
-                    <Text style={Styles.textError}> 
-                        {erro}
-                    </Text>
-                )}
-
-                <ButtonEnviar 
-                    titulo="Cadastrar"
-                    onPress={handleCadastro}
-                />
-                <View style={{paddingTop: 20}}>
-                    <TouchableOpacity style={{}} onPress={irParaLogin} activeOpacity={0.7}>
-                        <Text style={Styles.boxText}>É Elite? Clique aqui!</Text>
-                    </TouchableOpacity>
                 </View>
-
             </View>
-        </View>
         </ScrollView>
     )
 }
