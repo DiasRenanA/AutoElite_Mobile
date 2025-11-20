@@ -82,7 +82,7 @@ export default function PerfilScreen() {
             <Text style={Styles.label}>{label}:</Text>
             {isEditing ? (
                 <TextInput
-                    style={[Styles.textInput, { height: 40, marginBottom: 0, flex: 1 }]} // Estilo inline para ajustar no box
+                    style={[ { height: 40, marginBottom: 0, flex: 1 }]} // Estilo inline para ajustar no box
                     value={value}
                     onChangeText={onChange}
                     keyboardType={keyboardType}
