@@ -4,11 +4,12 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 interface AuthContextData {
   token: string | null;
   clientToken: string | null;
-  userType: 'cliente' | 'loja' | null; // 1. Novo campo para saber o tipo
+  userType: 'cliente' | 'loja' | null;
   isLoading: boolean;
   login: (token: string) => Promise<void>;
   setClientDataToken: (token: string) => Promise<void>;
-  saveUserType: (type: 'cliente' | 'loja' | null) => Promise<void>; // 2. Função para salvar o tipo
+  // A interface diz que pode receber null
+  saveUserType: (type: 'cliente' | 'loja' | null) => Promise<void>; 
   logout: () => Promise<void>;
 }
 
@@ -17,7 +18,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [clientToken, setClientToken] = useState<string | null>(null);
-  const [userType, setUserType] = useState<'cliente' | 'loja' | null>(null); // 3. Estado
+  const [userType, setUserType] = useState<'cliente' | 'loja' | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const [storedToken, storedClientToken, storedType] = await Promise.all([
             AsyncStorage.getItem('userToken'),
             AsyncStorage.getItem('clientToken'),
-            AsyncStorage.getItem('userType') // 4. Carrega o tipo
+            AsyncStorage.getItem('userType')
         ]);
 
         if (storedToken) setToken(storedToken);
@@ -52,10 +53,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await AsyncStorage.setItem('clientToken', newClientToken);
   };
 
-  // 5. Implementação da função para salvar tipo
-  const saveUserType = async (type: 'cliente' | 'loja') => {
+  // 👇 CORREÇÃO AQUI: 
+  // 1. Adicionamos '| null' na tipagem do parâmetro para bater com a interface.
+  // 2. Adicionamos um 'if' para só salvar no AsyncStorage se NÃO for null.
+  const saveUserType = async (type: 'cliente' | 'loja' | null) => {
     setUserType(type);
-    await AsyncStorage.setItem('userType', type);
+    
+    if (type) {
+        await AsyncStorage.setItem('userType', type);
+    } else {
+        // Se for null, removemos do storage (limpeza)
+        await AsyncStorage.removeItem('userType');
+    }
   };
 
   const logout = async () => {
@@ -69,11 +78,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider value={{ 
         token, 
         clientToken,
-        userType, // Exporta o estado
+        userType,
         isLoading, 
         login, 
         setClientDataToken, 
-        saveUserType, // Exporta a função
+        saveUserType,
         logout 
     }}>
       {children}
