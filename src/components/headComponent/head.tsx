@@ -1,15 +1,28 @@
-import { router } from "expo-router"
-import { Image, Text, TouchableOpacity, View } from "react-native"
-import { Styles } from "./styles"
+import { useAuth } from "@/src/contexts/AuthContext"; // 1. Importe o Contexto
+import { router } from "expo-router";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Styles } from "./styles";
 
 export const Head = () => {
+    // 2. Pegue o userType do contexto
+    const { userType } = useAuth();
+
     const irParaInicio = () => {
          router.push('/inicio')
     } 
 
     const irParaPerfil = () => {
-         router.push('/perfil')
+        // Lógica simples: se for loja vai pro perfil de loja, se for cliente vai pro perfil de cliente
+        if (userType === 'loja') {
+            router.push('/perfilLoja');
+        } else {
+            router.push('/perfil');
+        }
     } 
+    
+    const irParaAdminPanel = () => {
+        router.push('/adminPanelLoja');
+    }
 
     return(
        <View style={Styles.container}>
@@ -30,10 +43,19 @@ export const Head = () => {
                     <Text style={Styles.textButton}>Como funcionamos</Text>
                 </TouchableOpacity> 
 
-                <TouchableOpacity style={Styles.button} activeOpacity={0.7}>
-                    <Text style={Styles.textButton}>Nosso Objetivo</Text>
-                </TouchableOpacity> 
+                {userType === 'loja' && (
+                    <TouchableOpacity 
+                        style={Styles.button} 
+                        onPress={irParaAdminPanel} 
+                        activeOpacity={0.7}
+                    >
+                        <Text style={Styles.textButton}>
+                            Painel Loja
+                        </Text>
+                    </TouchableOpacity> 
+                )}
 
+                {/* Se NÃO for loja (ou seja, cliente ou visitante), mostra os outros botões normais se quiser */}
                 <TouchableOpacity style={Styles.button} activeOpacity={0.7}>
                     <Text style={Styles.textButton}>Contatos</Text>
                 </TouchableOpacity> 
@@ -60,13 +82,20 @@ export const HeadAdmLoja = () => {
         router.push('/adminPanelLoja') 
     } 
 
+    const irParaInicio = () => {
+        router.push('/inicio');
+    };
+
     return(
         <View style={Styles.containerAdmLoja}>
-            <Image
-                style={Styles.logo} 
-                source={require('@/src/assets/images/LogoAutoElite.svg')}
-                resizeMode="contain"
-            />
+            <TouchableOpacity onPress={irParaInicio}>
+                <Image
+                    style={Styles.logo} 
+                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    resizeMode="contain"
+                />
+            </TouchableOpacity>
+
 
             <TouchableOpacity onPress={irParaAdminPanelLoja} activeOpacity={0.7}>
                 <Text style={Styles.containerAdmLojaText}>Produtos</Text> 

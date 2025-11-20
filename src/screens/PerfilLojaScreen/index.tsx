@@ -1,16 +1,27 @@
 import { HeadAdmLoja } from "@/src/components/headComponent/head";
+import { useAuth } from "@/src/contexts/AuthContext"; // 1. Importar o contexto
 import { router } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
 export const PerfilLojaScreen = () => {
+    
+    // 2. Pegar a função logout do contexto
+    const { logout } = useAuth();
+
     const proximo = () => {
         router.push('/cadastroTipo');
     };
 
-    const sair = () => {
-        router.push('/');
+    const sair = async () => {
+        // 3. Chamar a função logout
+        await logout();
+        
+        // Como o token vai ficar nulo, o _layout raiz deve redirecionar automaticamente.
+        // Se quiser garantir, pode descomentar a linha abaixo:
+        // router.replace('/(public)/login');
     };
+
     return(
         <ScrollView >
             <HeadAdmLoja />

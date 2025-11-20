@@ -12,6 +12,14 @@ export const Styles = StyleSheet.create({
         marginBottom: 50,
     },
 
+        textH1:{
+        color: '#fff',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        paddingBottom: 20,
+    },
+
     textNegrito: {
         fontSize: 18,
         fontWeight: 'bold',

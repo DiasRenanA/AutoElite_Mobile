@@ -1,26 +1,18 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/context/AuthContext";
+import { useAuth } from "@/src/contexts/AuthContext"; // Ajuste o caminho se necessário
 import { router } from "expo-router";
-import { useState } from "react"; // Importa o useState
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
-
-export const LoginScreens = () => { 
+export default function LoginScreens() { 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [erro, setErro] = useState<string | null>(null);
-    const handleEmailChange = (text: string) => {
-        if (erro) setErro(null);
-        setEmail(text);
-    };
-
-    const handlePasswordChange = (text: string) => {
-        if (erro) setErro(null); 
-        setPassword(text);
-    };
+    const [isLoading, setIsLoading] = useState(false);
     
-    const { login } = useAuth();
+    // Pegamos o login (salva userToken) e setClientDataToken (salva token do perfil)
+    const { login, setClientDataToken, saveUserType } = useAuth();
 
     const handleLogin = async () => {
         setErro(null); 
@@ -30,34 +22,85 @@ export const LoginScreens = () => {
             return;
         }
 
+        setIsLoading(true);
+
         try {
-            const response = await fetch('http://localhost:3001/usuarios/login', { 
+            // 1. LOGIN DO USUÁRIO (BÁSICO)
+            const responseUser = await fetch('http://localhost:3001/usuarios/login', { 
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     email_usuario: email, 
                     pass_usuario: password 
                 }),
             });
 
-            const data = await response.json();
+            const dataUser = await responseUser.json();
 
-            if (!response.ok) {
-                throw new Error(data.message || 'E-mail ou senha inválidos.');
+            if (!responseUser.ok || !dataUser.token) {
+                throw new Error(dataUser.message || 'E-mail ou senha inválidos.');
             }
 
-            if (!data.token) {
-                throw new Error(data.message || 'Login falhou, mas a API não retornou um token.');
+            const userToken = dataUser.token;
+            let profileToken = null;
+            let profileType: 'cliente' | 'loja' | null = null;
+
+            // 2. TENTATIVA: BUSCAR PERFIL DE CLIENTE
+            try {
+                const responseCliente = await fetch('http://localhost:3001/clientes/id_user', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                });
+                
+                if (responseCliente.ok) {
+                    const dataCliente = await responseCliente.json();
+                    // Assume que a API retorna { token: "..." } ou adapta se for diferente
+                    profileToken = dataCliente.token_dados;
+                    profileType = 'cliente'
+                    console.log("Perfil Cliente encontrado");
+                }
+            } catch (e) {
+                // Ignora erro, significa que não é cliente, tenta loja...
             }
 
-            if (data.token) {
-                await login(data.token);
+            // 3. TENTATIVA: BUSCAR PERFIL DE LOJA (Se não achou cliente)
+            if (!profileToken) {
+                try {
+                    const responseLoja = await fetch('http://localhost:3001/lojas/id_user', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${userToken}` }
+                    });
+
+                    if (responseLoja.ok) {
+                        const dataLoja = await responseLoja.json();
+                        profileToken = dataLoja.token_dados;
+                        profileType = 'loja'
+                        console.log("Perfil Loja encontrado");
+                    }
+                } catch (e) {
+                    // Ignora erro
+                }
             }
+
+            // 4. SALVAR NA SESSÃO (CONTEXTO)
+            
+            // Se achou token de perfil (Seja Loja ou Cliente), salva ele
+            if (profileToken) {
+                await saveUserType(profileType);
+                await setClientDataToken(profileToken);
+            }
+
+            // Salva o token do usuário (Isso é o principal para logar)
+            await login(userToken);
+
+            // 5. REDIRECIONAR
+            router.replace('/(private)/inicio');
 
         } catch (error: any) {
-            setErro(error.message || 'Não foi possível conectar.');        }
+            setErro(error.message || 'Não foi possível conectar.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const irParaAdm = () => {
@@ -68,60 +111,68 @@ export const LoginScreens = () => {
         router.push('/cadastro');
     };
 
+    const irParaHome = () => {
+        router.push('/(public)/home');
+    };
 
     return(
         <ScrollView>
             <View style={Styles.container}>
-            <Image
-                source={require('@/src/assets/images/LogoAutoElite.svg')}
-                resizeMode="contain"
-            />
-            <View style={Styles.containerRed}>
-                <Text style={Styles.textH1}>Login</Text>
-                <View style={{display:'flex',gap:5}}>
-                    <Text style={Styles.textLabel}>E-mail:</Text>
-                    <TextInput
-                        style={Styles.textInput}
-                        value={email}
-                        onChangeText={handleEmailChange}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
+                <TouchableOpacity onPress={irParaHome}>
+                    <Image
+                        source={require('@/src/assets/images/LogoAutoElite.svg')}
+                        resizeMode="contain"
                     />
-                </View>
-                <View style={{display:'flex',gap:5}}>
-                    <Text style={Styles.textLabel}>Senha:</Text>
-                    <TextInput
-                        style={Styles.textInput}
-                        value={password}
-                        onChangeText={handlePasswordChange}
-                        secureTextEntry
-                    />
-                </View>
+                </TouchableOpacity>
+                <View style={Styles.containerRed}>
+                    <Text style={Styles.textH1}>Login</Text>
+                    
+                    <View style={{display:'flex',gap:5}}>
+                        <Text style={Styles.textLabel}>E-mail:</Text>
+                        <TextInput
+                            style={Styles.textInput}
+                            value={email}
+                            onChangeText={(t) => { setErro(null); setEmail(t); }}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                    </View>
+                    <View style={{display:'flex',gap:5}}>
+                        <Text style={Styles.textLabel}>Senha:</Text>
+                        <TextInput
+                            style={Styles.textInput}
+                            value={password}
+                            onChangeText={(t) => { setErro(null); setPassword(t); }}
+                            secureTextEntry
+                        />
+                    </View>
 
-                {erro && (
-                    <Text style={Styles.textError}> 
-                        {erro}
-                    </Text>
-                )}
+                    {erro && (
+                        <Text style={Styles.textError}> 
+                            {erro}
+                        </Text>
+                    )}
 
-                <ButtonEnviar 
-                    titulo="Entrar"
-                    onPress={handleLogin}
-                />
-                <View style={{paddingTop: 20}}>
-                    <TouchableOpacity style={{}} onPress={irParaCadastro} activeOpacity={0.7}>
-                        <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
+                    {isLoading ? (
+                        <ActivityIndicator size="large" color="#0000ff" style={{ marginVertical: 20 }} />
+                    ) : (
+                        <ButtonEnviar 
+                            titulo="Entrar"
+                            onPress={handleLogin}
+                        />
+                    )}
+
+                    <View style={{paddingTop: 20}}>
+                        <TouchableOpacity style={{}} onPress={irParaCadastro} activeOpacity={0.7}>
+                            <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <TouchableOpacity style={{}} onPress={irParaAdm} activeOpacity={0.7}>
+                        <Text>Admin</Text>
                     </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity style={{}} onPress={irParaAdm} activeOpacity={0.7}>
-                    <Text>Admin</Text>
-                </TouchableOpacity>
-
             </View>
-
-        </View>
         </ScrollView>
-        
     )
 }

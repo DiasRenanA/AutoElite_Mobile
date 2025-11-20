@@ -1,30 +1,41 @@
-import api from '@/src/services/api'; // ou '../services/api'
-import * as storage from '@/src/utils/storage'; // ou '../utils/storage'
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextData {
   token: string | null;
+  clientToken: string | null;
+  userType: 'cliente' | 'loja' | null;
   isLoading: boolean;
-  // Adicione os tipos string aqui:
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => void;
+  login: (token: string) => Promise<void>;
+  setClientDataToken: (token: string) => Promise<void>;
+  // A interface diz que pode receber null
+  saveUserType: (type: 'cliente' | 'loja' | null) => Promise<void>; 
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [clientToken, setClientToken] = useState<string | null>(null);
+  const [userType, setUserType] = useState<'cliente' | 'loja' | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadStorageData() {
       try {
-        const storedToken = await storage.getToken();
-        if (storedToken) {
-          setToken(storedToken);
-        }
+        const [storedToken, storedClientToken, storedType] = await Promise.all([
+            AsyncStorage.getItem('userToken'),
+            AsyncStorage.getItem('clientToken'),
+            AsyncStorage.getItem('userType')
+        ]);
+
+        if (storedToken) setToken(storedToken);
+        if (storedClientToken) setClientToken(storedClientToken);
+        if (storedType) setUserType(storedType as 'cliente' | 'loja');
+
       } catch (e) {
-        console.error(e);
+        console.error('Failed to load data', e);
       } finally {
         setIsLoading(false);
       }
@@ -32,37 +43,51 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadStorageData();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      const response = await api.post('/login', { email, password }); // Altere '/login' para sua rota de login
-      const { token }: { token: string } = response.data;
-      
-      setToken(token);
-      await storage.saveToken(token);
+  const login = async (newToken: string) => {
+    setToken(newToken);
+    await AsyncStorage.setItem('userToken', newToken);
+  };
 
-    } catch (error) {
-      console.error("Erro no login:", error);
-      // Você pode ser mais específico aqui se sua API retornar um erro
-      throw new Error("Falha ao autenticar. Verifique suas credenciais.");
+  const setClientDataToken = async (newClientToken: string) => {
+    setClientToken(newClientToken);
+    await AsyncStorage.setItem('clientToken', newClientToken);
+  };
+
+  // 👇 CORREÇÃO AQUI: 
+  // 1. Adicionamos '| null' na tipagem do parâmetro para bater com a interface.
+  // 2. Adicionamos um 'if' para só salvar no AsyncStorage se NÃO for null.
+  const saveUserType = async (type: 'cliente' | 'loja' | null) => {
+    setUserType(type);
+    
+    if (type) {
+        await AsyncStorage.setItem('userType', type);
+    } else {
+        // Se for null, removemos do storage (limpeza)
+        await AsyncStorage.removeItem('userType');
     }
   };
 
-  const signOut = async () => {
+  const logout = async () => {
     setToken(null);
-    await storage.deleteToken();
+    setClientToken(null);
+    setUserType(null);
+    await AsyncStorage.multiRemove(['userToken', 'clientToken', 'userType']);
   };
 
   return (
-    <AuthContext.Provider value={{ token, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ 
+        token, 
+        clientToken,
+        userType,
+        isLoading, 
+        login, 
+        setClientDataToken, 
+        saveUserType,
+        logout 
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+export const useAuth = () => useContext(AuthContext);
