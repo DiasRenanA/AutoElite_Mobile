@@ -11,7 +11,11 @@ type CardPequenoProps = {
     imageSource: ImageSourcePropType;
     distance: string;
 };
-
+type CardCadastroLojaProps = {
+    onPress: () => void;
+    title: string;
+    imageSource: ImageSourcePropType;
+};
 type CardGrandeProps = {
     title: string;
     imageSource: ImageSourcePropType;
@@ -23,6 +27,8 @@ type CardGrandeProps = {
     cep: string;
     rua: string;
     uf: string;
+    nmr: string;
+    onMapPress?: () => void;
 };
 
 type CardCadastroProps = {
@@ -51,7 +57,7 @@ export function CardPequeno({ onPress, title, imageSource, distance }: CardPeque
     )
 }
 
-export function CardGrande({title, imageSource, distance, razao, fantasia, tel, cel, cep, rua, uf}: CardGrandeProps) {
+export function CardGrande({title, imageSource, distance, razao, fantasia, tel, cel, cep, rua, uf, nmr, onMapPress }: CardGrandeProps) {
     return (
         <View style={Styles.CardGrande_container}>
             <Text style={Styles.CardGrande_h2}>{title}</Text>
@@ -93,11 +99,15 @@ export function CardGrande({title, imageSource, distance, razao, fantasia, tel, 
                 </View>
             </View>
 
+            <TouchableOpacity onPress={onMapPress}>
+                <Text>CLIQUE AQUI PARA VISUALIZAR ROTAS</Text>
+            </TouchableOpacity> 
             <Image
                 style={Styles.CardGrande_mapImage}
                 source={require('@/src/assets/images/maps.png')}
                 resizeMode="cover"
             />
+            
 
             <View style={Styles.CardGrande_infoContainer}>
                 <Text style={Styles.CardGrande_sectionTitle}>Informações do endereço:</Text>
@@ -108,6 +118,10 @@ export function CardGrande({title, imageSource, distance, razao, fantasia, tel, 
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Rua:</Text>
                     <Text style={Styles.CardGrande_infoValue}>{rua}</Text>
+                </View >
+                <View style={Styles.CardGrande_infoRow}>
+                    <Text style={Styles.CardGrande_infoLabel}>Número:</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{nmr}</Text>
                 </View >
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Estado:</Text>
@@ -161,15 +175,15 @@ export function CardCadastro({ title, imageSource, onEdit, onDelete }: CardCadas
     )
 }
 
-export function CardCadastroLoja({ onPress }: typeButton){
+export function CardCadastroLoja({onPress, title, imageSource}: CardCadastroLojaProps){
     return(
         <View style={Styles.containerCardCadastroLoja}> 
             
-            <Text style={Styles.cardCadastroLojaTitle}>Volante</Text>
+            <Text style={Styles.cardCadastroLojaTitle}>{title}</Text>
             
             <Image
                 style={Styles.cardCadastroLojaImage} 
-                source={require('@/src/assets/images/volante.png')}
+                source={imageSource}
                 resizeMode="contain"
             />
             

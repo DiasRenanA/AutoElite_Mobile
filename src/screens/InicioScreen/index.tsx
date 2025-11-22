@@ -2,9 +2,10 @@ import { CardPequeno } from "@/src/components/cardComponent/card"
 import { Head } from "@/src/components/headComponent/head"
 import { Input } from "@/src/components/inputComponent"
 import { Rodape } from "@/src/components/rodapeComponent/rodape"
+import { useAuth } from "@/src/context/AuthContext"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
-import { Image, ScrollView, Text, View, } from "react-native"
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Styles } from "./style"
 
 
@@ -12,9 +13,9 @@ import { Styles } from "./style"
 
 const API_URL = "http://localhost:3001/produtos_loja/";
 //const token_session = await AsyncStorage.getItem('token');
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkX3VzdWFyaW8iOjYsImVtYWlsX3VzdWFyaW8iOiJlc3NhZGlrNzUyQHVvcmFrLmNvbSIsInBhc3NfdXN1YXJpbyI6IiQyYiQxMCRkUzE3SHZnTGo4bkJCb0ZFc1dLL1R1OHZSbmpnM0xDSTlxY0s1N2hNcVA5RVNTNlUuWEhjZSIsInR5cGVVc2VyIjpudWxsLCJ2ZXJpZmljYWRvIjoiMjAyNS0wMS0wMVQwMzowMDowMC4wMDBaIn0sImlhdCI6MTc2MzY3MDQxOSwiZXhwIjoxNzYzNjc0MDE5fQ.2OSa-_JnrlhRPcRSHGdNz2ElVw8Wl6UgyYpxtBDNrgQ"
 
-export async function listar(nomes:string[] = [], categoria = null) {
+export async function listar(nomes:string[] = [], categoria = null,token:any = null) {
+
     const dadosUsuario = {
         nomes: nomes,
         categoria: categoria,
@@ -53,11 +54,14 @@ function limitarTexto(texto: string, limite: number) {
 
 
 export const InicioScreen = () => {
+    const {token} = useAuth()
+
+
     const [produtos, setProdutos] = useState<any[]>([]);
     const [pesquisa, setPesquisa] = useState("");
     useEffect(() => {
         async function carregarProdutos() {
-            const [resposta, mensagem] = await listar();
+            const [resposta, mensagem] = await listar([],null,token);
 
             if (resposta) {
                 console.log("Produtos recebidos:", resposta.produtos_loja);
@@ -76,6 +80,11 @@ export const InicioScreen = () => {
         });
     }
 
+
+    const irParaMyProducts = () =>{
+        router.push('/adminPanelLoja')
+    }
+
     const handlePesquisa = async (textoDigitado: string) => {
     setPesquisa(textoDigitado);
 
@@ -88,17 +97,19 @@ export const InicioScreen = () => {
     // garante que o React renderize a limpeza antes de continuar
     await new Promise(resolve => setTimeout(resolve, 10));
 
-    const [resposta, mensagem] = await listar(palavrasProcessadas);
+    const [resposta, mensagem] = await listar(palavrasProcessadas,null,token);
 
     setProdutos(resposta.produtos_loja);
 };
 
     return(
         <ScrollView>
-
             <View style={Styles.container}>
                 <Head/>
                 <Input onChange={handlePesquisa} />
+                <TouchableOpacity onPress={() => irParaMyProducts()}>
+                    <Text>ADICONAR PRODUTOS</Text>
+                </TouchableOpacity> 
                 <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
