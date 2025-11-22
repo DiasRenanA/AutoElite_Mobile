@@ -15,6 +15,7 @@ type CardCadastroLojaProps = {
     onPress: () => void;
     title: string;
     imageSource: ImageSourcePropType;
+    botao: string;
 };
 type CardGrandeProps = {
     title: string;
@@ -175,7 +176,7 @@ export function CardCadastro({ title, imageSource, onEdit, onDelete }: CardCadas
     )
 }
 
-export function CardCadastroLoja({onPress, title, imageSource}: CardCadastroLojaProps){
+export function CardCadastroLoja({onPress, title, imageSource, botao}: CardCadastroLojaProps){
     return(
         <View style={Styles.containerCardCadastroLoja}> 
             
@@ -192,7 +193,7 @@ export function CardCadastroLoja({onPress, title, imageSource}: CardCadastroLoja
                 onPress={onPress} 
                 activeOpacity={0.7}
             >
-                <Text style={Styles.cardCadastroLojaVincularButtonText}>Vincular</Text>
+                <Text style={Styles.cardCadastroLojaVincularButtonText}>{botao}</Text>
             </TouchableOpacity>
         </View>
     )
