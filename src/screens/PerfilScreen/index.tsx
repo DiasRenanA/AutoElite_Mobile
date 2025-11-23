@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
+//teste
 
 
 export default function PerfilScreen() {
