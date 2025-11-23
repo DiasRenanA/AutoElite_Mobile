@@ -81,7 +81,7 @@ export const CadastroLojaScreen = () => {
             setIsLoading(false);
         }
     };
-
+    //teste
     return(
         <ScrollView>
             <View style={Styles.container}>

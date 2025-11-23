@@ -1,14 +1,12 @@
 import { CardCadastro } from "@/src/components/cardComponent/card";
 import { HeadAdm } from "@/src/components/headComponent/head";
-import { Input } from "@/src/components/inputComponent";
 import { router } from "expo-router";
 import { FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
 export const AdminPanelScreens = () => {
-    const proximo = () => {
-        router.push('/login');
-    };
+    
+    
     const irParaCadastrarProduto = () => {
         router.push('/cadastrarProduto');
     };
@@ -31,7 +29,6 @@ const handleEditarProduto = () => {
         <ScrollView>
             <View style={Styles.container}>
                 <HeadAdm />
-                <Input />
                 <TouchableOpacity style={Styles.buttonCadastrar} onPress={irParaCadastrarProduto} activeOpacity={0.7}>
                     <Text style={{color: '#fff'}}>Cadastrar Produto</Text>
                 </TouchableOpacity>

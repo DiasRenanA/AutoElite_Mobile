@@ -11,6 +11,26 @@ type CardPequenoProps = {
     imageSource: ImageSourcePropType;
     distance: string;
 };
+type CardCadastroLojaProps = {
+    onPress: () => void;
+    title: string;
+    imageSource: ImageSourcePropType;
+    botao: string;
+};
+type CardGrandeProps = {
+    title: string;
+    imageSource: ImageSourcePropType;
+    distance: string;
+    razao: string;
+    fantasia: string;
+    tel: string;
+    cel: string;
+    cep: string;
+    rua: string;
+    uf: string;
+    nmr: string;
+    onMapPress?: () => void;
+};
 
 type CardCadastroProps = {
     title: string;
@@ -38,19 +58,14 @@ export function CardPequeno({ onPress, title, imageSource, distance }: CardPeque
     )
 }
 
-export function CardGrande() {
+export function CardGrande({title, imageSource, distance, razao, fantasia, tel, cel, cep, rua, uf, nmr, onMapPress }: CardGrandeProps) {
     return (
         <View style={Styles.CardGrande_container}>
-            <Text style={Styles.CardGrande_h2}>Volante Mercedes Mb 430mm Pequeno 608 710 1620 1935</Text>
+            <Text style={Styles.CardGrande_h2}>{title}</Text>
             <View style={Styles.CardGrande_productImagesContainer}>
                 <Image
                     style={Styles.CardGrande_productImage}
-                    source={require('@/src/assets/images/volante.png')}
-                    resizeMode="contain"
-                />
-                <Image
-                    style={Styles.CardGrande_productImage}
-                    source={require('@/src/assets/images/volante.png')} 
+                    source={imageSource}
                     resizeMode="contain"
                 />
             </View>
@@ -62,48 +77,56 @@ export function CardGrande() {
             </View>
 
             <View style={Styles.CardGrande_distanceBanner}>
-                <Text style={Styles.CardGrande_distanceBannerText}>Este produto está a 3.2 KM de você!</Text>
+                <Text style={Styles.CardGrande_distanceBannerText}>Este produto está a {distance} KM de você!</Text>
             </View>
 
             <View style={Styles.CardGrande_infoContainer}>
                 <Text style={Styles.CardGrande_sectionTitle}>Informações da loja:</Text>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Razão Social:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> ARCOS DOURADOS COMERCIO DE ALIMENTOS SA</Text>
+                    <Text style={Styles.CardGrande_infoValue}> {razao}</Text>
                 </View>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Nome Fantasia:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> Pedro Paulo</Text>
+                    <Text style={Styles.CardGrande_infoValue}> {fantasia}</Text>
                 </View>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Telefone:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> (11) 4196-9800</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{tel}</Text>
                 </View>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Celular:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> (11) 4196-9800</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{cel}</Text>
                 </View>
             </View>
 
+            <TouchableOpacity onPress={onMapPress}>
+                <Text>CLIQUE AQUI PARA VISUALIZAR ROTAS</Text>
+            </TouchableOpacity> 
             <Image
                 style={Styles.CardGrande_mapImage}
                 source={require('@/src/assets/images/maps.png')}
                 resizeMode="cover"
             />
+            
 
             <View style={Styles.CardGrande_infoContainer}>
                 <Text style={Styles.CardGrande_sectionTitle}>Informações do endereço:</Text>
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>CEP:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> 06785050</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{cep}</Text>
                 </View >
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Rua:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> Rua Antônio Marcos Torres</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{rua}</Text>
+                </View >
+                <View style={Styles.CardGrande_infoRow}>
+                    <Text style={Styles.CardGrande_infoLabel}>Número:</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{nmr}</Text>
                 </View >
                 <View style={Styles.CardGrande_infoRow}>
                     <Text style={Styles.CardGrande_infoLabel}>Estado:</Text>
-                    <Text style={Styles.CardGrande_infoValue}> SP</Text>
+                    <Text style={Styles.CardGrande_infoValue}>{uf}</Text>
                 </View>
             </View>
 
@@ -153,15 +176,15 @@ export function CardCadastro({ title, imageSource, onEdit, onDelete }: CardCadas
     )
 }
 
-export function CardCadastroLoja({ onPress }: typeButton){
+export function CardCadastroLoja({onPress, title, imageSource, botao}: CardCadastroLojaProps){
     return(
         <View style={Styles.containerCardCadastroLoja}> 
             
-            <Text style={Styles.cardCadastroLojaTitle}>Volante</Text>
+            <Text style={Styles.cardCadastroLojaTitle}>{title}</Text>
             
             <Image
                 style={Styles.cardCadastroLojaImage} 
-                source={require('@/src/assets/images/volante.png')}
+                source={imageSource}
                 resizeMode="contain"
             />
             
@@ -170,7 +193,7 @@ export function CardCadastroLoja({ onPress }: typeButton){
                 onPress={onPress} 
                 activeOpacity={0.7}
             >
-                <Text style={Styles.cardCadastroLojaVincularButtonText}>Vincular</Text>
+                <Text style={Styles.cardCadastroLojaVincularButtonText}>{botao}</Text>
             </TouchableOpacity>
         </View>
     )
