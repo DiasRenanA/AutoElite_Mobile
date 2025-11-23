@@ -1,7 +1,7 @@
 import { CardCadastroLoja } from "@/src/components/cardComponent/card";
 import { HeadAdmLoja } from "@/src/components/headComponent/head";
 import { Input } from "@/src/components/inputComponent";
-import { useAuth } from "@/src/context/AuthContext";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";

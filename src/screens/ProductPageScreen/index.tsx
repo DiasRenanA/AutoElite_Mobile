@@ -1,7 +1,7 @@
 import { CardGrande } from "@/src/components/cardComponent/card"
 import { Head } from "@/src/components/headComponent/head"
 import { Rodape } from "@/src/components/rodapeComponent/rodape"
-import { useAuth } from "@/src/context/AuthContext"
+import { useAuth } from "@/src/contexts/AuthContext"
 import { useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
 import { Linking, ScrollView, View } from "react-native"
