@@ -1,11 +1,30 @@
 import { Head } from "@/src/components/headComponent/head";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
+//teste
+
+
 export default function PerfilScreen() {
+     interface MyJwtPayload {
+        endereco: {
+            id: string;
+            bairro: string;
+            cep: string;
+            cidade: string;
+            rua: string;
+            latitude: number;
+            longitude: number;
+            nmr: string;
+            uf: string;
+            complemento: string;
+        };
+    }
     const { logout, token, clientToken } = useAuth();
+    const [screenKey, setScreenKey] = useState(0);
 
     // Controle de Edição e Loading
     const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +39,48 @@ export default function PerfilScreen() {
     const [bairro, setBairro] = useState('São Judas');
     const [cidade, setCidade] = useState('São Paulo');
     const [uf, setUf] = useState('SP');
-    const [idEndereco, setIdEndereco] = useState('6'); // ID necessário para a API
+    const [idEndereco, setIdEndereco] = useState('17'); // ID necessário para a API
+
+    
+    async function buscar() {
+        const API_URL = "http://localhost:3001/enderecos/";
+
+        try {
+            if(token && clientToken){
+                let response = await fetch(API_URL + "id_user/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": "Bearer "+token,
+                    "token_dados": clientToken
+                    },
+                });
+                const respostaJson = await response.json();
+
+                const mensagem = respostaJson.message;
+                if (response.status !== 200) {
+                    return [null, mensagem];
+                }
+
+                const decoded = jwtDecode<MyJwtPayload>(respostaJson.token_endereco);
+                console.log(decoded.endereco)
+                setCep(decoded.endereco.cep)
+                setBairro(decoded.endereco.bairro)
+                setCidade(decoded.endereco.cidade)
+                setComplemento(decoded.endereco.complemento)
+                setNmr(decoded.endereco.nmr)
+                setRua(decoded.endereco.rua)
+                setUf(decoded.endereco.uf)
+                setIdEndereco(decoded.endereco.id)
+
+            return [decoded, mensagem];
+            }
+            return ['token não encontrado', 'token']
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+            return [null, "Erro na requisição"];
+        }
+    }
 
     const handleSalvar = async () => {
         if (!token || !clientToken) {
@@ -62,6 +122,7 @@ export default function PerfilScreen() {
         } catch (error: any) {
             Alert.alert("Erro", error.message || "Falha na conexão.");
         } finally {
+            setScreenKey(screenKey + 1);
             setIsLoading(false);
         }
     };
@@ -93,8 +154,20 @@ export default function PerfilScreen() {
         </View>
     );
 
+    useEffect(() => {
+            async function carregarProdutos() {
+                const [resposta, mensagem] = await buscar();
+    
+                if (resposta) {
+                    console.log("Produtos recebidos:", resposta);
+                }
+            }
+
+        carregarProdutos()
+        }, [screenKey]);
+
     return (
-        <ScrollView contentContainerStyle={Styles.container}>
+        <ScrollView key={screenKey} contentContainerStyle={Styles.container}>
             <Head />
 
             <Text style={Styles.h1}>No menu, você edita suas principais informações.</Text>
