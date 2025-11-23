@@ -7,7 +7,7 @@ export const CadastroLojaScreen = () => {
     const proximo = () => {
         router.push('/cadastroEnderecoLoja')
     };
-
+    //teste
     return(
         <ScrollView>
             <View style={Styles.container}>
