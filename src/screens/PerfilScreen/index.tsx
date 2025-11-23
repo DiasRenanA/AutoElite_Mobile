@@ -10,7 +10,7 @@ import { Styles } from "./style";
 export default function PerfilScreen() {
      interface MyJwtPayload {
         endereco: {
-            id: number;
+            id: string;
             bairro: string;
             cep: string;
             cidade: string;
@@ -70,6 +70,7 @@ export default function PerfilScreen() {
                 setNmr(decoded.endereco.nmr)
                 setRua(decoded.endereco.rua)
                 setUf(decoded.endereco.uf)
+                setIdEndereco(decoded.endereco.id)
 
             return [decoded, mensagem];
             }
