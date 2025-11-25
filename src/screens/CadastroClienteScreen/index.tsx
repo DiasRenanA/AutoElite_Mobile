@@ -1,5 +1,5 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/contexts/AuthContext"; // Importando do Contexto
+import { useAuth } from "@/src/contexts/AuthContext";
 import { Picker } from '@react-native-picker/picker';
 import { router } from "expo-router";
 import { useState } from "react";
@@ -8,8 +8,7 @@ import { Styles } from "./style";
 
 export const CadastroClienteScreen = () => {
 
-    // 1. Pegamos o token (para o header) e a função (para salvar o novo token)
-    const { token, setClientDataToken } = useAuth(); 
+    const { token, setClientDataToken, apiUrl } = useAuth(); 
 
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
@@ -21,7 +20,6 @@ export const CadastroClienteScreen = () => {
     const [erro, setErro] = useState<string | null>(null);
 
     const handleCadastroCliente = async () => {
-        // Validação de segurança: Token existe?
         if (isLoading || !token) {
             setErro('Sessão inválida. Por favor, faça login novamente.');
             return;
@@ -36,11 +34,11 @@ export const CadastroClienteScreen = () => {
         setErro(null);
 
         try {
-            const response = await fetch('http://localhost:3001/clientes/criar', {
+            const response = await fetch(apiUrl + 'clientes/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Usando token do contexto
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     cpf: cpf,
@@ -60,14 +58,12 @@ export const CadastroClienteScreen = () => {
 
             const novoTokenCliente = data.token_dados; 
 
-            // 2. AQUI MUDOU: Salvamos direto no Contexto/Sessão
             if (novoTokenCliente) {
                 await setClientDataToken(novoTokenCliente);
             } else {
                 throw new Error('API não retornou o token do cliente.');
             }
 
-            // 3. Navegação limpa (sem passar parâmetros na URL)
             router.push('/(public)/cadastroEnderecoCliente');
 
         } catch (error: any) {

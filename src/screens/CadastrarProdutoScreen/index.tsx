@@ -9,41 +9,33 @@ export const CadastrarProdutoScreen = () => {
     };
 
     const handleChooseFile = () => {
-        // Lógica para abrir o seletor de arquivos (ImagePicker, DocumentPicker, etc.)
         console.log("Abrir seletor de arquivos...");
     };
 
     const handleCadastrarProduto = () => {
-        // Lógica para cadastrar o produto
         console.log("Cadastrar produto...");
-        // Você pode chamar 'proximo()' aqui depois de cadastrar
-        // proximo(); 
     };
 
     return(
         <ScrollView contentContainerStyle={Styles.CadastrarProduto_scrollViewContent}>
             <View style={Styles.CadastrarProduto_container}>
                 
-                {/* Título da tela */}
                 <Text style={Styles.CadastrarProduto_title}>Cadastro de Produto</Text>
 
-                {/* Campo Nome do produto */}
                 <Text style={Styles.CadastrarProduto_label}>Nome do produto:</Text>
                 <TextInput
                     style={Styles.CadastrarProduto_input}
-                    placeholder="" // No design não tem placeholder para "Nome do produto"
+                    placeholder=""
                     placeholderTextColor="#888"
                 />
 
-                {/* Campo Categoria */}
                 <Text style={Styles.CadastrarProduto_label}>Categoria:</Text>
                 <TextInput
                     style={Styles.CadastrarProduto_input}
-                    placeholder="" // No design não tem placeholder para "Categoria"
+                    placeholder="" 
                     placeholderTextColor="#888"
                 />
 
-                {/* Seleção de Imagem */}
                 <Text style={Styles.CadastrarProduto_imageLabel}>Selecione uma imagem</Text>
                 <TouchableOpacity 
                     style={Styles.CadastrarProduto_chooseFileButton} 
@@ -53,10 +45,9 @@ export const CadastrarProdutoScreen = () => {
                     <Text style={Styles.CadastrarProduto_chooseFileButtonText}>Escolher arquivo</Text>
                 </TouchableOpacity>
 
-                {/* Botão Cadastrar Produto */}
                 <TouchableOpacity 
                     style={Styles.CadastrarProduto_cadastrarButton} 
-                    onPress={handleCadastrarProduto} // Chama a função de cadastro
+                    onPress={handleCadastrarProduto} 
                     activeOpacity={0.7}
                 >
                     <Text style={Styles.CadastrarProduto_cadastrarButtonText}>Cadastrar produto</Text>

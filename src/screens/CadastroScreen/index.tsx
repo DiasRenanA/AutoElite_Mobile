@@ -12,7 +12,7 @@ export const CadastroScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [erro, setErro] = useState<string | null>(null);
 
-    const { login } = useAuth();
+    const { login, apiUrl } = useAuth();
 
     const handleCadastro = async () => {
         if (isLoading) return;
@@ -23,7 +23,7 @@ export const CadastroScreen = () => {
         }
         setIsLoading(true);
         try{
-            const response = await fetch('http://localhost:3001/usuarios/criar', {
+            const response = await fetch(apiUrl + 'usuarios/criar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

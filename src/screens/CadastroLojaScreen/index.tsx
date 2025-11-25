@@ -1,5 +1,5 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/contexts/AuthContext"; // Importando o Contexto
+import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, TextInput, View } from "react-native";
@@ -7,29 +7,23 @@ import { Styles } from "./style";
 
 export const CadastroLojaScreen = () => {
 
-    // 1. Pega o token do usuário e a função para salvar o token da loja
-    // (Reaproveitamos o setClientDataToken para guardar o token de dados da loja)
-    const { token, setClientDataToken } = useAuth();
-
-    // Estados do formulário
+    const { token, setClientDataToken,apiUrl } = useAuth();
     const [cnpj, setCnpj] = useState('');
     const [nomeFantasia, setNomeFantasia] = useState('');
     const [razaoSocial, setRazaoSocial] = useState('');
     const [telefone, setTelefone] = useState('');
     const [celular, setCelular] = useState('');
-    const [abertura, setAbertura] = useState(''); // Data de abertura (Exigido na API)
+    const [abertura, setAbertura] = useState(''); 
     
     const [isLoading, setIsLoading] = useState(false);
     const [erro, setErro] = useState<string | null>(null);
 
     const handleCadastroLoja = async () => {
-        // Validação de segurança
         if (isLoading || !token) {
             setErro('Sessão inválida. Por favor, faça login novamente.');
             return;
         }
 
-        // Validação de campos vazios
         if (!cnpj || !nomeFantasia || !razaoSocial || !telefone || !celular || !abertura) {
             setErro('Preencha todos os campos, incluindo a Data de Abertura.');
             return;
@@ -39,11 +33,11 @@ export const CadastroLojaScreen = () => {
         setErro(null);
 
         try {
-            const response = await fetch('http://localhost:3001/lojas/criar', {
+            const response = await fetch(apiUrl + 'lojas/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Token do usuário logado
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     cnpj: cnpj,
@@ -51,7 +45,7 @@ export const CadastroLojaScreen = () => {
                     razaoSocial: razaoSocial,
                     telefone: telefone,
                     celular: celular,
-                    abertura: abertura // Formato esperado: YYYY-MM-DD
+                    abertura: abertura 
                 })
             });
 
@@ -61,18 +55,14 @@ export const CadastroLojaScreen = () => {
                 throw new Error(data.message || 'Erro ao cadastrar a loja.');
             }
 
-            // O backend deve retornar o token com os dados da loja recém criada
-            // Geralmente vem como 'token' ou 'token_dados'. Vou usar a mesma lógica do cliente.
             const novoTokenLoja = data.token_dados || data.token; 
 
             if (novoTokenLoja) {
-                // 2. Salva o token da loja no contexto (para usar na tela de endereço)
                 await setClientDataToken(novoTokenLoja);
             } else {
                 throw new Error('API não retornou o token da loja.');
             }
 
-            // 3. Navega para o cadastro de endereço da loja
             router.push('/(public)/cadastroEnderecoLoja');
 
         } catch (error: any) {
@@ -81,7 +71,6 @@ export const CadastroLojaScreen = () => {
             setIsLoading(false);
         }
     };
-    //teste
     return(
         <ScrollView>
             <View style={Styles.container}>

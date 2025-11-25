@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
-//teste
-
 
 export default function PerfilScreen() {
      interface MyJwtPayload {
@@ -23,15 +21,11 @@ export default function PerfilScreen() {
             complemento: string;
         };
     }
-    const { logout, token, clientToken } = useAuth();
+    const { logout, token, clientToken, apiUrl } = useAuth();
     const [screenKey, setScreenKey] = useState(0);
-
-    // Controle de Edição e Loading
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Estados dos Dados (Inicializados com os valores do seu exemplo)
-    // Na vida real, você buscaria isso de um useEffect com GET /enderecos
     const [cep, setCep] = useState('06840160');
     const [rua, setRua] = useState('Rua Sebastião Francisco dos Santos');
     const [nmr, setNmr] = useState('360');
@@ -39,11 +33,11 @@ export default function PerfilScreen() {
     const [bairro, setBairro] = useState('São Judas');
     const [cidade, setCidade] = useState('São Paulo');
     const [uf, setUf] = useState('SP');
-    const [idEndereco, setIdEndereco] = useState('17'); // ID necessário para a API
+    const [idEndereco, setIdEndereco] = useState('17'); 
 
     
     async function buscar() {
-        const API_URL = "http://localhost:3001/enderecos/";
+        const API_URL = apiUrl + "enderecos/";
 
         try {
             if(token && clientToken){
@@ -91,7 +85,7 @@ export default function PerfilScreen() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:3001/enderecos/editar', {
+            const response = await fetch(apiUrl + 'enderecos/editar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +111,7 @@ export default function PerfilScreen() {
             }
 
             Alert.alert("Sucesso", "Endereço atualizado!");
-            setIsEditing(false); // Sai do modo de edição
+            setIsEditing(false);
 
         } catch (error: any) {
             Alert.alert("Erro", error.message || "Falha na conexão.");
@@ -128,22 +122,19 @@ export default function PerfilScreen() {
     };
 
     const toggleEdicao = () => {
-        // Se for cancelar, poderíamos resetar os valores aqui se tivéssemos um backup
         setIsEditing(!isEditing);
     };
 
     const sair = async () => {
         await logout();
-        // router.replace('/(public)/login'); // Opcional
     };
 
-    // Componente auxiliar para renderizar Campo ou Texto
     const RenderField = ({ label, value, onChange, keyboardType = 'default' }: any) => (
         <View style={Styles.boxText}>
             <Text style={Styles.label}>{label}:</Text>
             {isEditing ? (
                 <TextInput
-                    style={[ { height: 40, marginBottom: 0, flex: 1 }]} // Estilo inline para ajustar no box
+                    style={[ { height: 40, marginBottom: 0, flex: 1 }]}
                     value={value}
                     onChangeText={onChange}
                     keyboardType={keyboardType}
@@ -172,7 +163,6 @@ export default function PerfilScreen() {
 
             <Text style={Styles.h1}>No menu, você edita suas principais informações.</Text>
 
-            {/* --- DADOS CADASTRAIS (Estáticos por enquanto) --- */}
             <View style={Styles.boxCadastro}>
                 <Text style={Styles.cardTitle}>Informações cadastrais:</Text>
                 <View style={Styles.boxText}>
@@ -183,14 +173,11 @@ export default function PerfilScreen() {
                     <Text style={Styles.label}>Nome:</Text>
                     <Text style={Styles.value}>Gustavo Sousa de Melo</Text>
                 </View>
-                {/* Adicione os outros campos estáticos aqui... */}
             </View>
 
-            {/* --- ENDEREÇO (Editável) --- */}
             <View style={Styles.boxCadastro}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={Styles.cardTitle}>Informações de endereço:</Text>
-                    {/* ID do endereço para debug (opcional) */}
                     {isEditing && <Text style={{fontSize: 10, color: '#aaa'}}>ID: {idEndereco}</Text>}
                 </View>
 

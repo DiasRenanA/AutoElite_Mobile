@@ -20,7 +20,6 @@ export async function getToken(): Promise<string | null> {
   }
 }
 
-// Remove o token (para logout)
 export async function deleteToken(): Promise<void> {
   try {
     await SecureStore.deleteItemAsync(TOKEN_KEY);

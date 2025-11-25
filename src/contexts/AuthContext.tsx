@@ -1,14 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+//const API_URL = "https://hubabrantes.ddns.net/gateway/auto-elite/";
+const API_URL = "http://localhost:3001/";
+
 interface AuthContextData {
   token: string | null;
   clientToken: string | null;
   userType: 'cliente' | 'loja' | null;
   isLoading: boolean;
+  apiUrl: string;
   login: (token: string) => Promise<void>;
   setClientDataToken: (token: string) => Promise<void>;
-  // A interface diz que pode receber null
   saveUserType: (type: 'cliente' | 'loja' | null) => Promise<void>; 
   logout: () => Promise<void>;
 }
@@ -53,16 +56,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await AsyncStorage.setItem('clientToken', newClientToken);
   };
 
-  // 👇 CORREÇÃO AQUI: 
-  // 1. Adicionamos '| null' na tipagem do parâmetro para bater com a interface.
-  // 2. Adicionamos um 'if' para só salvar no AsyncStorage se NÃO for null.
   const saveUserType = async (type: 'cliente' | 'loja' | null) => {
     setUserType(type);
     
     if (type) {
         await AsyncStorage.setItem('userType', type);
     } else {
-        // Se for null, removemos do storage (limpeza)
         await AsyncStorage.removeItem('userType');
     }
   };
@@ -80,6 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clientToken,
         userType,
         isLoading, 
+        apiUrl: API_URL,
         login, 
         setClientDataToken, 
         saveUserType,

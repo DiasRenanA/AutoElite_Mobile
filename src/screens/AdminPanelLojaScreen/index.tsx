@@ -8,15 +8,12 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
-
-
-
 export const AdminPanelLojaScreen = () => {
     
 
     const [screenKey, setScreenKey] = useState(0);
 
-    const {token} = useAuth()
+    const {token, apiUrl} = useAuth()
     
     const [pesquisa, setPesquisa] = useState("");
 
@@ -29,11 +26,9 @@ export const AdminPanelLojaScreen = () => {
     
         const palavrasProcessadas = limparTexto(textoDigitado);
         console.log("Palavras filtradas:", palavrasProcessadas);
-    
-        // limpa a lista
+
         setProdutos([]);
     
-        // garante que o React renderize a limpeza antes de continuar
         await new Promise(resolve => setTimeout(resolve, 10));
     
         const [resposta, mensagem] = await listar(palavrasProcessadas,null);
@@ -41,7 +36,7 @@ export const AdminPanelLojaScreen = () => {
         setProdutos(resposta.produtos);
     };
 
-    const API_URL = "http://localhost:3001/";
+    const API_URL = apiUrl;
 
     function limitarTexto(texto: string, limite: number) {
     if (texto.length <= limite) return texto;
@@ -51,8 +46,6 @@ export const AdminPanelLojaScreen = () => {
     async function listarMyProducts(){
 
         buscarDados()
-
-        const API_URL = "http://localhost:3001/produtos_loja/";
         
         try{
 
@@ -184,7 +177,7 @@ export const AdminPanelLojaScreen = () => {
     }
 
     const adicionarProduto = async function(id_product: number){
-        const resposta = await fetch('http://localhost:3001/produtos_loja/criar/', {
+        const resposta = await fetch(apiUrl + 'produtos_loja/criar/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -201,7 +194,7 @@ export const AdminPanelLojaScreen = () => {
                 return mensagem
         }
     const excluirProduto = async function(id_product: number){
-        const resposta = await fetch('http://localhost:3001/produtos_loja/excluir/', {
+        const resposta = await fetch(apiUrl + 'produtos_loja/excluir/', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -266,24 +259,18 @@ export function limparTexto(texto:string) {
     ];
     if (!texto) return [];
 
-    // 1. Remover pontuação
     let resultado = texto.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "");
 
-    // 2. Remover múltiplos espaços
     resultado = resultado.replace(/\s+/g, " ").trim();
 
-    // 3. Separar em palavras
     let palavras = resultado.split(" ");
 
-    // 4. Remover stopwords
     let palavrasFiltradas = palavras.filter(
         p => !stopwords.includes(p.toLowerCase())
     );
 
-    // 5. Normalizar tudo para lowercase
     palavrasFiltradas = palavrasFiltradas.map(p => p.toLowerCase());
 
-    // 6. Remover repetidas
     palavrasFiltradas = [...new Set(palavrasFiltradas)];
 
     return palavrasFiltradas;

@@ -7,15 +7,12 @@ import { useEffect, useState } from "react"
 import { Linking, ScrollView, View } from "react-native"
 import { Styles } from "./style"
 
-
-    
-    const API_URL = "http://localhost:3001/produtos_loja/";
-
     
 export const ProductPageScreen = () => {
-    const {token} = useAuth()
+    const {token, apiUrl} = useAuth()
     const { id } = useLocalSearchParams();
     const [getProduto, setProduto] = useState<any>(null);
+    const API_URL = apiUrl + "produtos_loja/";
 
     async function buscar() {
         const idNumber = Number(id);

@@ -1,16 +1,14 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/contexts/AuthContext"; // Certifique-se que o caminho é 'context' (singular)
-import { router } from "expo-router"; // Removemos useLocalSearchParams
+import { useAuth } from "@/src/contexts/AuthContext";
+import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from "react-native";
 import { Styles } from "./style";
 
 export const CadastroEnderecoClienteScreen = () => {
 
-    // 1. Pegamos os tokens direto do Contexto (Cofre)
-    const { token, clientToken } = useAuth(); 
+    const { token, clientToken, apiUrl } = useAuth(); 
 
-    // Estados do formulário
     const [erro, setErro] = useState<string | null>(null);
     const [cep, setCep] = useState('');
     const [rua, setRua] = useState('');
@@ -24,13 +22,11 @@ export const CadastroEnderecoClienteScreen = () => {
     const handleSaveAddressAndLogin = async () => {
         setErro(null); 
 
-        // Validação dos campos
         if (!cep || !rua || !bairro || !cidade || !uf || !nmr) {
             setErro('Erro: Preencha todos os campos obrigatórios.');
             return;
         }
         
-        // 2. Validação de Segurança: Verifica se os tokens estão no contexto
         if (!token || !clientToken) {
             Alert.alert('Sessão Expirada', 'Tokens não encontrados. Reinicie o cadastro.');
             router.replace('/(public)/cadastro');
@@ -40,13 +36,14 @@ export const CadastroEnderecoClienteScreen = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:3001/enderecos/criar', {
+            console.log("Token User: ", token)
+            console.log("Token Cliente: ", clientToken)
+
+            const response = await fetch(apiUrl + 'enderecos/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 🔑 HEADER 1: Token de Dados do Cliente (do Contexto)
                     'token_dados': clientToken, 
-                    // 🔑 HEADER 2: Token de Autenticação do Usuário (do Contexto)
                     'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
@@ -62,21 +59,22 @@ export const CadastroEnderecoClienteScreen = () => {
 
             const data = await response.json();
 
+            console.log("Resposta API: ", data)
+
             if (!response.ok) {
                 throw new Error(data.message || 'Não foi possível salvar o endereço.');
             }
 
-            // SUCESSO!
             Alert.alert("Sucesso!", "Cadastro completo! Entrando no app.");
 
-            // 3. Como você desligou o redirecionamento automático no _layout,
-            // fazemos a navegação manual para a área privada agora.
             router.replace('/(private)/inicio');
 
         } catch (error: any) {
+            console.log("Resposta catch: ", error.message)
             setErro(error.message || 'Erro ao Salvar Endereço.');
         } finally {
             setIsLoading(false);
+            console.log("Resposta finally: ")
         }
     };
 

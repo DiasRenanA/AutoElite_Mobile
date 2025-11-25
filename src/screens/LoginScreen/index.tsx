@@ -1,5 +1,5 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/contexts/AuthContext"; // Ajuste o caminho se necessário
+import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -11,8 +11,7 @@ export default function LoginScreens() {
     const [erro, setErro] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     
-    // Pegamos o login (salva userToken) e setClientDataToken (salva token do perfil)
-    const { login, setClientDataToken, saveUserType } = useAuth();
+    const { login, setClientDataToken, saveUserType, apiUrl } = useAuth();
 
     const handleLogin = async () => {
         setErro(null); 
@@ -25,8 +24,7 @@ export default function LoginScreens() {
         setIsLoading(true);
 
         try {
-            // 1. LOGIN DO USUÁRIO (BÁSICO)
-            const responseUser = await fetch('http://localhost:3001/usuarios/login', { 
+            const responseUser = await fetch(apiUrl + 'usuarios/login', { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -45,28 +43,25 @@ export default function LoginScreens() {
             let profileToken = null;
             let profileType: 'cliente' | 'loja' | null = null;
 
-            // 2. TENTATIVA: BUSCAR PERFIL DE CLIENTE
             try {
-                const responseCliente = await fetch('http://localhost:3001/clientes/id_user', {
+                const responseCliente = await fetch(apiUrl + 'clientes/id_user', {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${userToken}` }
                 });
                 
                 if (responseCliente.ok) {
                     const dataCliente = await responseCliente.json();
-                    // Assume que a API retorna { token: "..." } ou adapta se for diferente
                     profileToken = dataCliente.token_dados;
                     profileType = 'cliente'
                     console.log("Perfil Cliente encontrado");
                 }
             } catch (e) {
-                // Ignora erro, significa que não é cliente, tenta loja...
+            
             }
 
-            // 3. TENTATIVA: BUSCAR PERFIL DE LOJA (Se não achou cliente)
             if (!profileToken) {
                 try {
-                    const responseLoja = await fetch('http://localhost:3001/lojas/id_user', {
+                    const responseLoja = await fetch(apiUrl + 'lojas/id_user', {
                         method: 'POST',
                         headers: { 'Authorization': `Bearer ${userToken}` }
                     });
@@ -78,22 +73,16 @@ export default function LoginScreens() {
                         console.log("Perfil Loja encontrado");
                     }
                 } catch (e) {
-                    // Ignora erro
                 }
             }
 
-            // 4. SALVAR NA SESSÃO (CONTEXTO)
-            
-            // Se achou token de perfil (Seja Loja ou Cliente), salva ele
             if (profileToken) {
                 await saveUserType(profileType);
                 await setClientDataToken(profileToken);
             }
 
-            // Salva o token do usuário (Isso é o principal para logar)
             await login(userToken);
 
-            // 5. REDIRECIONAR
             router.replace('/(private)/inicio');
 
         } catch (error: any) {

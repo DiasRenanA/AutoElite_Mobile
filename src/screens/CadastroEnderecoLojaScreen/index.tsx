@@ -1,5 +1,5 @@
 import { ButtonEnviar } from "@/src/components/buttonsComponent/buttons";
-import { useAuth } from "@/src/contexts/AuthContext"; // Importando do Contexto
+import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from "react-native";
@@ -7,10 +7,7 @@ import { Styles } from "./style";
 
 export const CadastroEnderecoLojaScreen = () => {
 
-    // 1. Pegamos os tokens do Contexto
-    // 'token': Token do usuário logado/criado
-    // 'clientToken': Token contendo os dados da LOJA (salvo na tela anterior)
-    const { token, clientToken } = useAuth(); 
+    const { token, clientToken, apiUrl } = useAuth(); 
 
     const [cep, setCep] = useState('');
     const [rua, setRua] = useState('');
@@ -26,14 +23,12 @@ export const CadastroEnderecoLojaScreen = () => {
     const handleSaveAddressAndFinalize = async () => {
         setErro(null);
 
-        // Validação de segurança
         if (isLoading || !token || !clientToken) {
             Alert.alert('Sessão Expirada', 'Tokens não encontrados. Reinicie o cadastro.');
             router.replace('/(public)/cadastro');
             return;
         }
 
-        // Validação de campos obrigatórios
         if (!cep || !rua || !bairro || !cidade || !uf || !nmr) {
             setErro('Preencha todos os campos obrigatórios.');
             return;
@@ -42,14 +37,11 @@ export const CadastroEnderecoLojaScreen = () => {
         setIsLoading(true);
 
         try {
-            // 2. Reutilizamos o mesmo endpoint de endereços
-            const response = await fetch('http://localhost:3001/enderecos/criar', {
+            const response = await fetch(apiUrl + 'enderecos/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 🔑 HEADER 1: Token de Dados da LOJA (salvo como clientToken no contexto)
                     'token_dados': clientToken, 
-                    // 🔑 HEADER 2: Token de Autenticação do Usuário
                     'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
@@ -68,13 +60,7 @@ export const CadastroEnderecoLojaScreen = () => {
             if (!response.ok) {
                 throw new Error(data.message || 'Não foi possível salvar o endereço da loja.');
             }
-
-            // 3. Sucesso!
             Alert.alert("Sucesso!", "Loja cadastrada com sucesso! Entrando...");
-
-            // 4. Navegação manual para a área privada (Painel da Loja ou Início)
-            // Como é uma loja, talvez você queira ir para '/adminPanelLoja', mas 
-            // vou mandar para '/inicio' conforme seu pedido anterior.
             router.replace('/(private)/inicio');
 
         } catch (error: any) {

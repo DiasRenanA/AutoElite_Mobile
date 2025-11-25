@@ -8,11 +8,10 @@ import { useEffect, useState } from "react"
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Styles } from "./style"
 
+const { apiUrl } = useAuth();
 
 
-
-const API_URL = "http://localhost:3001/produtos_loja/";
-//const token_session = await AsyncStorage.getItem('token');
+const API_URL = apiUrl + "produtos_loja/";
 
 export async function listar(nomes:string[] = [], categoria = null,token:any = null) {
 
@@ -91,10 +90,8 @@ export const InicioScreen = () => {
     const palavrasProcessadas = limparTexto(textoDigitado);
     console.log("Palavras filtradas:", palavrasProcessadas);
 
-    // limpa a lista
     setProdutos([]);
 
-    // garante que o React renderize a limpeza antes de continuar
     await new Promise(resolve => setTimeout(resolve, 10));
 
     const [resposta, mensagem] = await listar(palavrasProcessadas,null,token);
@@ -124,8 +121,8 @@ export const InicioScreen = () => {
 
                             distance={
                                 token
-                                ? item.distancia + " km"   // 👉 quando tem token
-                                : "Descubra a distância deste produto"  // 👉 quando não tem
+                                ? item.distancia + " km"  
+                                : "Descubra a distância deste produto"  
                             }
                         />
                     ))}
@@ -165,24 +162,18 @@ export function limparTexto(texto:string) {
     ];
     if (!texto) return [];
 
-    // 1. Remover pontuação
     let resultado = texto.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "");
 
-    // 2. Remover múltiplos espaços
     resultado = resultado.replace(/\s+/g, " ").trim();
 
-    // 3. Separar em palavras
     let palavras = resultado.split(" ");
 
-    // 4. Remover stopwords
     let palavrasFiltradas = palavras.filter(
         p => !stopwords.includes(p.toLowerCase())
     );
 
-    // 5. Normalizar tudo para lowercase
     palavrasFiltradas = palavrasFiltradas.map(p => p.toLowerCase());
 
-    // 6. Remover repetidas
     palavrasFiltradas = [...new Set(palavrasFiltradas)];
 
     return palavrasFiltradas;
