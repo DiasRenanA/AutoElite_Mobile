@@ -46,7 +46,7 @@ export default function PerfilScreen() {
                 headers: {
                     "Content-Type": "application/json",
                     "authorization": "Bearer "+token,
-                    "token_dados": clientToken
+                    "tokendados": clientToken
                     },
                 });
                 const respostaJson = await response.json();

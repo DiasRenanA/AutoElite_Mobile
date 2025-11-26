@@ -49,16 +49,18 @@ export const AdminPanelLojaScreen = () => {
         
         try{
 
-            const response = await fetch(API_URL + "listarProdutosLoja/", {
+            const response = await fetch(API_URL + "produtos_loja/listarProdutosLoja/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "authorization": "Bearer "+token,
-                    "token_dados": TokenDados
+                    "tokendados": TokenDados
                 },
             });
             const respostaJson = await response.json();
         
+            console.log("Produtos:", respostaJson)
+
             const mensagem = respostaJson.message;
             if (response.status !== 200) {
                 return [null, mensagem];

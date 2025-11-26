@@ -41,7 +41,7 @@ export const CadastroEnderecoLojaScreen = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'token_dados': clientToken, 
+                    'tokendados': clientToken, 
                     'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
