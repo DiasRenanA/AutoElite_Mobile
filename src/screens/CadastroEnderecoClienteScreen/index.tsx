@@ -36,14 +36,12 @@ export const CadastroEnderecoClienteScreen = () => {
         setIsLoading(true);
 
         try {
-            console.log("Token User: ", token)
-            console.log("Token Cliente: ", clientToken)
 
             const response = await fetch(apiUrl + 'enderecos/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'token_dados': clientToken, 
+                    'tokendados': clientToken, 
                     'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
@@ -59,22 +57,17 @@ export const CadastroEnderecoClienteScreen = () => {
 
             const data = await response.json();
 
-            console.log("Resposta API: ", data)
 
             if (!response.ok) {
                 throw new Error(data.message || 'Não foi possível salvar o endereço.');
             }
 
-            Alert.alert("Sucesso!", "Cadastro completo! Entrando no app.");
-
             router.replace('/(private)/inicio');
 
         } catch (error: any) {
             console.log("Resposta catch: ", error.message)
-            setErro(error.message || 'Erro ao Salvar Endereço.');
         } finally {
             setIsLoading(false);
-            console.log("Resposta finally: ")
         }
     };
 
