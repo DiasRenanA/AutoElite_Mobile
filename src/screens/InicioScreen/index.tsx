@@ -8,12 +8,9 @@ import { useEffect, useState } from "react"
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Styles } from "./style"
 
-const { apiUrl } = useAuth();
 
 
-const API_URL = apiUrl + "produtos_loja/";
-
-export async function listar(nomes:string[] = [], categoria = null,token:any = null) {
+export async function listar(nomes:string[] = [], categoria = null,token:any = null,apiUrl:string) {
 
     const dadosUsuario = {
         nomes: nomes,
@@ -21,7 +18,7 @@ export async function listar(nomes:string[] = [], categoria = null,token:any = n
     };
 
     try {
-        let response = await fetch(API_URL + "listar/", {
+        let response = await fetch(apiUrl + "listar/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -29,7 +26,7 @@ export async function listar(nomes:string[] = [], categoria = null,token:any = n
             },
             body: JSON.stringify(dadosUsuario),
         });
-
+        
         const respostaJson = await response.json();
         console.log(respostaJson)
         const mensagem = respostaJson.message;
@@ -53,6 +50,10 @@ function limitarTexto(texto: string, limite: number) {
 
 
 export const InicioScreen = () => {
+    const { apiUrl } = useAuth();
+
+
+    const API_URL = apiUrl + "produtos_loja/";
     const {token} = useAuth()
 
 
@@ -60,7 +61,7 @@ export const InicioScreen = () => {
     const [pesquisa, setPesquisa] = useState("");
     useEffect(() => {
         async function carregarProdutos() {
-            const [resposta, mensagem] = await listar([],null,token);
+            const [resposta, mensagem] = await listar([],null,token,API_URL);
 
             if (resposta) {
                 console.log("Produtos recebidos:", resposta.produtos_loja);
@@ -94,7 +95,7 @@ export const InicioScreen = () => {
 
     await new Promise(resolve => setTimeout(resolve, 10));
 
-    const [resposta, mensagem] = await listar(palavrasProcessadas,null,token);
+    const [resposta, mensagem] = await listar(palavrasProcessadas,null,token,API_URL);
 
     setProdutos(resposta.produtos_loja);
 };
