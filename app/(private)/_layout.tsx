@@ -4,7 +4,6 @@ export default function AppLayout() {
   return (
     <Stack>
       <Stack.Screen name="inicio" options={{ title: 'Home' }} />
-      <Stack.Screen name="adminPanel" options={{ title: 'Painel Admin' }} />
       <Stack.Screen name="adminPanelLoja" options={{ title: 'Admin Loja' }} />
       <Stack.Screen name="cadastrarProduto" options={{ title: 'Cadastrar Produto' }} />
       <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />

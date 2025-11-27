@@ -83,7 +83,11 @@ export default function LoginScreens() {
 
             await login(userToken);
 
-            router.replace('/(private)/inicio');
+            if (email.trim() === 'adminColiseu@admin.com') {
+                router.replace('/(public)/adminPanel');
+            } else {
+                router.replace('/(private)/inicio');
+            }
 
         } catch (error: any) {
             setErro(error.message || 'Não foi possível conectar.');

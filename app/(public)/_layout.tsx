@@ -9,6 +9,7 @@ export default function AuthLayout() {
       <Stack.Screen name="cadastro" options={{ headerShown: false }} />
       <Stack.Screen name="cadastroCliente" options={{ title: 'Cadastro Cliente' }} />
       <Stack.Screen name="cadastroLoja" options={{ title: 'Cadastro Loja' }} />
+      <Stack.Screen name="adminPanel" options={{ title: 'Painel Admin' }} />
     </Stack>
   );
 }

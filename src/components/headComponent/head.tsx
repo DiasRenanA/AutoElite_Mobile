@@ -109,14 +109,19 @@ export const HeadAdmLoja = () => {
 }
 
 export const HeadAdm = () => {
-
+    const irParaHome = () => {
+        router.push('/home');
+    };
     return(
         <View style={Styles.containerAdmLoja}>
+            <TouchableOpacity onPress={irParaHome}>
             <Image
                 style={Styles.logo} 
                 source={require('@/src/assets/images/LogoAutoElite.svg')}
                 resizeMode="contain"
             />
+            </TouchableOpacity>
+
         </View>
     )
 }
