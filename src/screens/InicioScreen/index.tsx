@@ -8,12 +8,9 @@ import { useEffect, useState } from "react"
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Styles } from "./style"
 
-const { apiUrl } = useAuth();
 
 
-const API_URL = apiUrl + "produtos_loja/";
-
-export async function listar(nomes:string[] = [], categoria = null,token:any = null) {
+export async function listar(nomes:string[] = [], categoria = null,token:any = null, API_URL:string) {
 
     const dadosUsuario = {
         nomes: nomes,
@@ -53,6 +50,10 @@ function limitarTexto(texto: string, limite: number) {
 
 
 export const InicioScreen = () => {
+    const { apiUrl } = useAuth();
+
+
+    const API_URL = apiUrl + "produtos_loja/";
     const {token} = useAuth()
 
 
@@ -60,7 +61,7 @@ export const InicioScreen = () => {
     const [pesquisa, setPesquisa] = useState("");
     useEffect(() => {
         async function carregarProdutos() {
-            const [resposta, mensagem] = await listar([],null,token);
+            const [resposta, mensagem] = await listar([],null,token,API_URL);
 
             if (resposta) {
                 console.log("Produtos recebidos:", resposta.produtos_loja);
@@ -94,7 +95,7 @@ export const InicioScreen = () => {
 
     await new Promise(resolve => setTimeout(resolve, 10));
 
-    const [resposta, mensagem] = await listar(palavrasProcessadas,null,token);
+    const [resposta, mensagem] = await listar(palavrasProcessadas,null,token, API_URL);
 
     setProdutos(resposta.produtos_loja);
 };
