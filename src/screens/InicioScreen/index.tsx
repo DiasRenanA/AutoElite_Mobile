@@ -26,7 +26,7 @@ export async function listar(nomes:string[] = [], categoria = null,token:any = n
             },
             body: JSON.stringify(dadosUsuario),
         });
-
+        
         const respostaJson = await response.json();
         console.log(respostaJson)
         const mensagem = respostaJson.message;

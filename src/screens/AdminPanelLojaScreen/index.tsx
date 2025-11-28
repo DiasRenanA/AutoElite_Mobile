@@ -54,7 +54,7 @@ export const AdminPanelLojaScreen = () => {
                 headers: {
                     "Content-Type": "application/json",
                     "authorization": "Bearer "+token,
-                    "tokendados": TokenDados
+                    "token_dados": TokenDados
                 },
             });
             const respostaJson = await response.json();
