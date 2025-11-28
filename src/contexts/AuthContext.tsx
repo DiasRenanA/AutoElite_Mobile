@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const API_URL = "https://hubabrantes.ddns.net/gateway/auto-elite/";
+const API_URL = "http://localhost:3001/";
 //const API_URL = "http://localhost:3001/";
 
 interface AuthContextData {
