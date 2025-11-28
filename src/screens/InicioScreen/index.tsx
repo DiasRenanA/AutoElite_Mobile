@@ -10,7 +10,11 @@ import { Styles } from "./style"
 
 
 
+<<<<<<< HEAD
 export async function listar(nomes:string[] = [], categoria = null,token:any = null, API_URL:string) {
+=======
+export async function listar(nomes:string[] = [], categoria = null,token:any = null,apiUrl:string) {
+>>>>>>> bbc00359c075d3f95891e88378ccacbc15572a13
 
     const dadosUsuario = {
         nomes: nomes,
@@ -18,7 +22,7 @@ export async function listar(nomes:string[] = [], categoria = null,token:any = n
     };
 
     try {
-        let response = await fetch(API_URL + "listar/", {
+        let response = await fetch(apiUrl + "listar/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -26,7 +30,7 @@ export async function listar(nomes:string[] = [], categoria = null,token:any = n
             },
             body: JSON.stringify(dadosUsuario),
         });
-
+        
         const respostaJson = await response.json();
         console.log(respostaJson)
         const mensagem = respostaJson.message;
@@ -95,7 +99,11 @@ export const InicioScreen = () => {
 
     await new Promise(resolve => setTimeout(resolve, 10));
 
+<<<<<<< HEAD
     const [resposta, mensagem] = await listar(palavrasProcessadas,null,token, API_URL);
+=======
+    const [resposta, mensagem] = await listar(palavrasProcessadas,null,token,API_URL);
+>>>>>>> bbc00359c075d3f95891e88378ccacbc15572a13
 
     setProdutos(resposta.produtos_loja);
 };
