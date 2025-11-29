@@ -23,7 +23,7 @@ export const AdminPanelLojaScreen = () => {
 
     const handlePesquisa = async (textoDigitado: string) => {
         setPesquisa(textoDigitado);
-    
+        //
         const palavrasProcessadas = limparTexto(textoDigitado);
         console.log("Palavras filtradas:", palavrasProcessadas);
 
@@ -54,7 +54,7 @@ export const AdminPanelLojaScreen = () => {
                 headers: {
                     "Content-Type": "application/json",
                     "authorization": "Bearer "+token,
-                    "token_dados": TokenDados
+                    "tokendados": TokenDados
                 },
             });
             const respostaJson = await response.json();
@@ -184,7 +184,7 @@ export const AdminPanelLojaScreen = () => {
                 headers: {
                     'Content-Type': 'application/json',
                     "authorization": "Bearer "+token,
-                    "token_dados": TokenDados
+                    "tokendados": TokenDados
                 },
                 body: JSON.stringify({ id_produto: id_product })
                 });
@@ -201,7 +201,7 @@ export const AdminPanelLojaScreen = () => {
                 headers: {
                     'Content-Type': 'application/json',
                     "authorization": "Bearer "+token,
-                    "token_dados": TokenDados
+                    "tokendados": TokenDados
                 },
                 body: JSON.stringify({ id_produto_loja: id_product })
                 });
