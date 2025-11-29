@@ -49,7 +49,7 @@ export const PerfilLojaScreen = () => {
                     headers: {
                         "Content-Type": "application/json",
                         "authorization": "Bearer "+token,
-                        "token_dados": clientToken
+                        "tokendados": clientToken
                         },
                     });
                     const respostaJson = await response.json();
@@ -86,13 +86,13 @@ export const PerfilLojaScreen = () => {
             }
     
             setIsLoading(true);
-    
+            //pedro
             try {
                 const response = await fetch(apiUrl + 'enderecos/editar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'token_dados': clientToken,
+                        'tokendados': clientToken,
                         'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify({
@@ -171,34 +171,6 @@ export const PerfilLojaScreen = () => {
             <View style={Styles.container}>
                 <Text style={Styles.h1}>No menu, você edita suas principais informações.</Text>
                 
-                <View style={Styles.boxCadastro}>
-                    <Text style={Styles.cardTitle}>Informações cadastrais:</Text>
-                    
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>CPF:</Text>
-                        <Text style={Styles.value}>424.323.542-44</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Nome Completo:</Text>
-                        <Text style={Styles.value}>Gustavo Sousa de Melo</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Telefone:</Text>
-                        <Text style={Styles.value}>(11) 98345-2345</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Data de Nascimento:</Text>
-                        <Text style={Styles.value}>23/03/1998</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Gênero:</Text>
-                        <Text style={Styles.value}>Masculino</Text>
-                    </View >
-                    
-                    <TouchableOpacity style={Styles.buttonEdit} activeOpacity={0.7}>
-                        <Text style={Styles.buttonText}>Editar</Text>
-                    </TouchableOpacity>
-                </View>
                 </View>
                 <View style={Styles.boxCadastro}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>

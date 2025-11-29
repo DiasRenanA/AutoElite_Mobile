@@ -163,17 +163,7 @@ export default function PerfilScreen() {
 
             <Text style={Styles.h1}>No menu, você edita suas principais informações.</Text>
 
-            <View style={Styles.boxCadastro}>
-                <Text style={Styles.cardTitle}>Informações cadastrais:</Text>
-                <View style={Styles.boxText}>
-                    <Text style={Styles.label}>CPF:</Text>
-                    <Text style={Styles.value}>424.323.542-44</Text>
-                </View>
-                <View style={Styles.boxText}>
-                    <Text style={Styles.label}>Nome:</Text>
-                    <Text style={Styles.value}>Gustavo Sousa de Melo</Text>
-                </View>
-            </View>
+            
 
             <View style={Styles.boxCadastro}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
