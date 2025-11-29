@@ -156,7 +156,7 @@ export default function PerfilScreen() {
 
         carregarProdutos()
         }, [screenKey]);
-
+//
     return (
         <ScrollView key={screenKey} contentContainerStyle={Styles.container}>
             <Head />
