@@ -49,7 +49,7 @@ export const PerfilLojaScreen = () => {
                     headers: {
                         "Content-Type": "application/json",
                         "authorization": "Bearer "+token,
-                        "token_dados": clientToken
+                        "tokendados": clientToken
                         },
                     });
                     const respostaJson = await response.json();
@@ -92,7 +92,7 @@ export const PerfilLojaScreen = () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'token_dados': clientToken,
+                        'tokendados': clientToken,
                         'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify({
