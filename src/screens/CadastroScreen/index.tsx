@@ -69,7 +69,7 @@ export const CadastroScreen = () => {
             <View style={Styles.container}>
                 <TouchableOpacity onPress={irParaHome}>
                     <Image
-                        source={require('@/src/assets/images/LogoAutoElite.svg')}
+                        source={require('@/src/assets/images/LogoAutoElite.png')}
                         resizeMode="contain"
                     />
                 </TouchableOpacity>
@@ -92,7 +92,6 @@ export const CadastroScreen = () => {
                             style={Styles.textInput}
                             value={password}
                             onChangeText={setPassword}
-                            secureTextEntry
                         />
                     </View>
                     <View style={{display:'flex',gap:5}}>
@@ -101,7 +100,6 @@ export const CadastroScreen = () => {
                             style={Styles.textInput}
                             value={confirmPassword}
                             onChangeText={setConfirmPassword}
-                            secureTextEntry
                         />
                     </View>
 

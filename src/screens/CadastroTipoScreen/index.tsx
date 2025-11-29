@@ -20,7 +20,7 @@ export const CadastroTipoScreen = () => {
         <ScrollView >
             <View style={Styles.container}>
                 <Image
-                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    source={require('@/src/assets/images/LogoAutoElite.png')}
                     resizeMode="contain"
                 />
                 <Text style={Styles.textNegrito}>Antes de começarmos, {`\n`} precisamos te conhecer!</Text>

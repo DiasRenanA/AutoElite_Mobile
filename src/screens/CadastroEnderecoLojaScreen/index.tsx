@@ -114,7 +114,7 @@ export const CadastroEnderecoLojaScreen = () => {
         <ScrollView>
             <View style={Styles.container}>
                 <Image
-                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    source={require('@/src/assets/images/LogoAutoElite.png')}
                     resizeMode="contain"
                 />
                 <View style={Styles.containerRed}>

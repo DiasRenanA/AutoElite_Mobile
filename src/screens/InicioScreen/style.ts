@@ -2,11 +2,8 @@ import { StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
     container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexDirection: 'row',
+        flexDirection: 'column',
         width: '100%',
-        justifyContent: 'center',
         gap: 30,
         paddingBottom: 50,
     },

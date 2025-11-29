@@ -29,7 +29,7 @@ export const Head = () => {
             <TouchableOpacity style={{}} onPress={irParaInicio} activeOpacity={0.7}>
                 <Image
                     style={{width: 100}}
-                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    source={require('@/src/assets/images/LogoAutoElite.png')}
                     resizeMode="contain"
                 />
             </TouchableOpacity>
@@ -63,7 +63,7 @@ export const Head = () => {
 
             <TouchableOpacity style={{}} onPress={irParaPerfil} activeOpacity={0.7}>
                 <Image
-                    source={require('@/src/assets/images/user_icon.svg')}
+                    source={require('@/src/assets/images/user_icon.png')}
                     resizeMode="contain"
                 />
             </TouchableOpacity>
@@ -91,7 +91,7 @@ export const HeadAdmLoja = () => {
             <TouchableOpacity onPress={irParaInicio}>
                 <Image
                     style={Styles.logo} 
-                    source={require('@/src/assets/images/LogoAutoElite.svg')}
+                    source={require('@/src/assets/images/LogoAutoElite.png')}
                     resizeMode="contain"
                 />
             </TouchableOpacity>
@@ -117,7 +117,7 @@ export const HeadAdm = () => {
             <TouchableOpacity onPress={irParaHome}>
             <Image
                 style={Styles.logo} 
-                source={require('@/src/assets/images/LogoAutoElite.svg')}
+                source={require('@/src/assets/images/LogoAutoElite.png')}
                 resizeMode="contain"
             />
             </TouchableOpacity>

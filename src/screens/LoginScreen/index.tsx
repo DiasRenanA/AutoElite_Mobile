@@ -96,10 +96,6 @@ export default function LoginScreens() {
         }
     };
 
-    const irParaAdm = () => {
-        router.push('/(private)/adminPanel');
-    };
-
     const irParaCadastro = () => {
         router.push('/cadastro');
     };
@@ -113,7 +109,7 @@ export default function LoginScreens() {
             <View style={Styles.container}>
                 <TouchableOpacity onPress={irParaHome}>
                     <Image
-                        source={require('@/src/assets/images/LogoAutoElite.svg')}
+                        source={require('@/src/assets/images/LogoAutoElite.png')}
                         resizeMode="contain"
                     />
                 </TouchableOpacity>
@@ -136,7 +132,6 @@ export default function LoginScreens() {
                             style={Styles.textInput}
                             value={password}
                             onChangeText={(t) => { setErro(null); setPassword(t); }}
-                            secureTextEntry
                         />
                     </View>
 
@@ -160,10 +155,6 @@ export default function LoginScreens() {
                             <Text style={Styles.boxText}>Não tem login? Cadastre-se!</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <TouchableOpacity style={{}} onPress={irParaAdm} activeOpacity={0.7}>
-                        <Text>Admin</Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         </ScrollView>

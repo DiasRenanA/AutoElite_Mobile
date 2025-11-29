@@ -5,7 +5,7 @@ import { Rodape } from "@/src/components/rodapeComponent/rodape"
 import { useAuth } from "@/src/contexts/AuthContext"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { FlatList, Image, ScrollView, Text, View } from "react-native"
 import { Styles } from "./style"
 
 
@@ -101,33 +101,36 @@ export const InicioScreen = () => {
 };
 
     return(
-        <ScrollView>
+        <ScrollView 
+                nestedScrollEnabled={true} 
+                contentContainerStyle={{ flexGrow: 1 }} 
+            >
             <View style={Styles.container}>
                 <Head/>
                 <Input onChange={handlePesquisa} />
-                <TouchableOpacity onPress={() => irParaMyProducts()}>
-                    <Text>ADICONAR PRODUTOS</Text>
-                </TouchableOpacity> 
-                <ScrollView
+                <FlatList
+                    data={produtos}
                     horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {
-                        produtos.map((item) => (
+                    showsHorizontalScrollIndicator={true}
+                    persistentScrollbar={true}
+                    keyExtractor={(item) => String(item.id_produto_loja)}
+                    nestedScrollEnabled={true} 
+                    style={{ flexGrow: 0 }}
+                    contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 10 }} 
+                    renderItem={({ item }) => (
                         <CardPequeno
-                            key={item.id_produto_loja}
+                            // Não precisa de key aqui, o keyExtractor já cuida disso
                             onPress={() => irParaProductPage(item.id_produto_loja)}
                             title={limitarTexto(item.produto.nome_produto, 20)}
                             imageSource={{ uri: item.produto.img }}
-
                             distance={
                                 token
                                 ? item.distancia + " km"  
                                 : "Descubra a distância deste produto"  
                             }
                         />
-                    ))}
-                </ScrollView>
+                    )}
+                />
 
                 <View style={Styles.containerBeneficios}>
                     <Image

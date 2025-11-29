@@ -20,7 +20,7 @@ export const Input = ({ onChange }: { onChange: (texto: string) => void }) => {
             />
 
             <Image
-                source={require('@/src/assets/images/lupa_icon.svg')}
+                source={require('@/src/assets/images/lupa_icon.png')}
                 style={Styles.inputIcon}
                 resizeMode="contain"
             />
