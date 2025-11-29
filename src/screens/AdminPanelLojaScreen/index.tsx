@@ -235,7 +235,7 @@ export const AdminPanelLojaScreen = () => {
                             <CardCadastroLoja
                                 key={item.id_produto}
                                 title={limitarTexto(item.nome_produto, 30)}
-                                imageSource={item.img}
+                                imageSource={{uri: item.img}}
                                 botao={botao}
                                 onPress={() =>
                                     botao === "Vincular"

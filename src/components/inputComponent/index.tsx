@@ -14,9 +14,9 @@ export const Input = ({ onChange }: { onChange: (texto: string) => void }) => {
                 placeholderTextColor="#aaa"
                 underlineColorAndroid="transparent"
                 value={valor}
-                onChangeText={setValor} // só atualiza o texto no input
-                onSubmitEditing={() => onChange(valor)} // só envia quando clicar ENTER
-                returnKeyType="search" // muda o botão do teclado pra "Buscar"
+                onChangeText={setValor} 
+                onSubmitEditing={() => onChange(valor)} 
+                returnKeyType="search" 
             />
 
             <Image

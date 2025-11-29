@@ -107,7 +107,9 @@ export const InicioScreen = () => {
             >
             <View style={Styles.container}>
                 <Head/>
-                <Input onChange={handlePesquisa} />
+                <View style={{paddingLeft: 15}}>
+                    <Input onChange={handlePesquisa} />
+                </View>
                 <FlatList
                     data={produtos}
                     horizontal={true}
