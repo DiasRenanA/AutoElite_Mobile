@@ -1,12 +1,133 @@
 import { HeadAdmLoja } from "@/src/components/headComponent/head";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { router } from "expo-router";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Styles } from "./style";
 
+
+
 export const PerfilLojaScreen = () => {
+
+    interface MyJwtPayload {
+        endereco: {
+            id: string;
+            bairro: string;
+            cep: string;
+            cidade: string;
+            rua: string;
+            latitude: number;
+            longitude: number;
+            nmr: string;
+            uf: string;
+            complemento: string;
+        };
+    }
+
+    const { logout, token, clientToken, apiUrl } = useAuth();
+    const [screenKey, setScreenKey] = useState(0);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [cep, setCep] = useState('06840160');
+    const [rua, setRua] = useState('Rua Sebastião Francisco dos Santos');
+    const [nmr, setNmr] = useState('360');
+    const [complemento, setComplemento] = useState('Casa 2');
+    const [bairro, setBairro] = useState('São Judas');
+    const [cidade, setCidade] = useState('São Paulo');
+    const [uf, setUf] = useState('SP');
+    const [idEndereco, setIdEndereco] = useState('17'); 
+
+    async function buscar() {
+            const API_URL = apiUrl + "enderecos/";
     
-    const { logout } = useAuth();
+            try {
+                if(token && clientToken){
+                    let response = await fetch(API_URL + "id_user/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": "Bearer "+token,
+                        "token_dados": clientToken
+                        },
+                    });
+                    const respostaJson = await response.json();
+    
+                    const mensagem = respostaJson.message;
+                    if (response.status !== 200) {
+                        return [null, mensagem];
+                    }
+    
+                    const decoded = jwtDecode<MyJwtPayload>(respostaJson.token_endereco);
+                    console.log(decoded.endereco)
+                    setCep(decoded.endereco.cep)
+                    setBairro(decoded.endereco.bairro)
+                    setCidade(decoded.endereco.cidade)
+                    setComplemento(decoded.endereco.complemento)
+                    setNmr(decoded.endereco.nmr)
+                    setRua(decoded.endereco.rua)
+                    setUf(decoded.endereco.uf)
+                    setIdEndereco(decoded.endereco.id)
+    
+                return [decoded, mensagem];
+                }
+                return ['token não encontrado', 'token']
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                return [null, "Erro na requisição"];
+            }
+    }
+
+    const handleSalvar = async () => {
+            if (!token || !clientToken) {
+                Alert.alert('Erro', 'Sessão inválida.');
+                return;
+            }
+    
+            setIsLoading(true);
+    
+            try {
+                const response = await fetch(apiUrl + 'enderecos/editar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token_dados': clientToken,
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        id_endereco: Number(idEndereco),
+                        cep,
+                        rua,
+                        nmr: Number(nmr),
+                        bairro,
+                        cidade,
+                        uf,
+                        complemento
+                    })
+                });
+    
+                const data = await response.json();
+    
+                if (!response.ok) {
+                    throw new Error(data.message || 'Erro ao atualizar.');
+                }
+    
+                Alert.alert("Sucesso", "Endereço atualizado!");
+                setIsEditing(false);
+    
+            } catch (error: any) {
+                Alert.alert("Erro", error.message || "Falha na conexão.");
+            } finally {
+                setScreenKey(screenKey + 1);
+                setIsLoading(false);
+            }
+    };
+
+    
+    const toggleEdicao = () => {
+        setIsEditing(!isEditing);
+    };
 
     const proximo = () => {
         router.push('/cadastroTipo');
@@ -16,6 +137,33 @@ export const PerfilLojaScreen = () => {
         await logout();
     };
 
+    useEffect(() => {
+                async function carregarProdutos() {
+                    const [resposta, mensagem] = await buscar();
+        
+                    if (resposta) {
+                        console.log("Produtos recebidos:", resposta);
+                    }
+                }
+    
+            carregarProdutos()
+            }, [screenKey]);
+
+    const RenderField = ({ label, value, onChange, keyboardType = 'default' }: any) => (
+            <View style={Styles.boxText}>
+                <Text style={Styles.label}>{label}:</Text>
+                {isEditing ? (
+                    <TextInput
+                        style={[ { height: 40, marginBottom: 0, flex: 1 }]}
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType={keyboardType}
+                    />
+                ) : (
+                    <Text style={Styles.value}>{value}</Text>
+                )}
+            </View>
+        );
     return(
         <ScrollView >
             <HeadAdmLoja />
@@ -47,46 +195,52 @@ export const PerfilLojaScreen = () => {
                         <Text style={Styles.value}>Masculino</Text>
                     </View >
                     
-                    <TouchableOpacity style={Styles.buttonEdit} onPress={proximo} activeOpacity={0.7}>
+                    <TouchableOpacity style={Styles.buttonEdit} activeOpacity={0.7}>
                         <Text style={Styles.buttonText}>Editar</Text>
                     </TouchableOpacity>
                 </View>
-
+                </View>
                 <View style={Styles.boxCadastro}>
-                    <Text style={Styles.cardTitle}>Informações de endereço:</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Text style={Styles.cardTitle}>Informações de endereço:</Text>
+                        {isEditing && <Text style={{fontSize: 10, color: '#aaa'}}>ID: {idEndereco}</Text>}
+                    </View>
 
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>CEP:</Text>
-                        <Text style={Styles.value}>06840-160</Text>
+                    <RenderField label="CEP" value={cep} onChange={setCep} keyboardType="numeric" />
+                    <RenderField label="Rua" value={rua} onChange={setRua} />
+                    <RenderField label="Número" value={nmr} onChange={setNmr} keyboardType="numeric" />
+                    <RenderField label="Compl." value={complemento} onChange={setComplemento} />
+                    <RenderField label="Bairro" value={bairro} onChange={setBairro} />
+                    <RenderField label="Cidade" value={cidade} onChange={setCidade} />
+                    <RenderField label="UF" value={uf} onChange={setUf} />
+
+                    <View style={{ marginTop: 15 }}>
+                        {isLoading ? (
+                            <ActivityIndicator size="large" color="#000" />
+                        ) : (
+                            <>
+                                {isEditing ? (
+                                    <View style={{ gap: 10 }}>
+                                        <TouchableOpacity style={Styles.buttonEdit} onPress={handleSalvar} activeOpacity={0.7}>
+                                            <Text style={Styles.buttonText}>Salvar Alterações</Text>
+                                        </TouchableOpacity>
+                                        
+                                        <TouchableOpacity 
+                                            style={[Styles.buttonEdit, { backgroundColor: '#ccc' }]} 
+                                            onPress={toggleEdicao} 
+                                            activeOpacity={0.7}
+                                        >
+                                            <Text style={Styles.buttonText}>Cancelar</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ) : (
+                                    <TouchableOpacity style={Styles.buttonEdit} onPress={toggleEdicao} activeOpacity={0.7}>
+                                        <Text style={Styles.buttonText}>Editar Endereço</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </>
+                        )}
                     </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>RUA:</Text>
-                        <Text style={Styles.value}>Rua Sebastião Francisco dos Santos</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Número:</Text>
-                        <Text style={Styles.value}>360</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Complemento:</Text>
-                        <Text style={Styles.value}>Casa 2</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Bairro:</Text>
-                        <Text style={Styles.value}>São Judas</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>Cidade:</Text>
-                        <Text style={Styles.value}>São Paulo</Text>
-                    </View>
-                    <View style={Styles.boxText}>
-                        <Text style={Styles.label}>UF:</Text>
-                        <Text style={Styles.value}>SP</Text>
-                    </View>
-                    
-                    <TouchableOpacity style={Styles.buttonEdit} onPress={proximo} activeOpacity={0.7}>
-                        <Text style={Styles.buttonText}>Editar</Text>
-                    </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity style={Styles.logoutButton} onPress={sair} activeOpacity={0.7}>
@@ -96,7 +250,6 @@ export const PerfilLojaScreen = () => {
                 <Text style={Styles.footerText}>
                     Auto Elite – conectando você ao melhor do mundo automotivo.
                 </Text>
-            </View>
         </ScrollView>
     )
 }
